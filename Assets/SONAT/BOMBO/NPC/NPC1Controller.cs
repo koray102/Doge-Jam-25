@@ -35,7 +35,7 @@ public class NPC1Controller : NPCBase
             // Oyuncunun tespit edilip edilmedi�ini kontrol et
             bool detected = IsPlayerDetected();
 
-            if (detected && visibleKontrol.isVisible)
+            if (detected)
             {
             
                 // Chase zamanlay�c�s�n� s�f�rla
@@ -80,13 +80,13 @@ public class NPC1Controller : NPCBase
                 lastFacingDirection = facingDirection;
 
                 // Chase zamanlay�c�s� s�f�rdan b�y�kse, NPC'yi oyuncunun son bilinen x pozisyonuna do�ru hareket ettir
-                if (chaseTimer > 0f && Mathf.Abs(deltaX) > attackRange && visibleKontrol.isVisible)
+                if (chaseTimer > 0f && Mathf.Abs(deltaX) > attackRange)
                 {
                     Vector2 newPos = transform.position;
                     newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
                     transform.position = newPos;
                 }
-                else if (chaseTimer > 0f && visibleKontrol.isVisible)
+                else if (chaseTimer > 0f)
                 {
 
                 }
@@ -113,10 +113,10 @@ public class NPC1Controller : NPCBase
             if (obj.gameObject.layer == LayerMask.NameToLayer("Character"))
             {
                 // Diğer objeler için, örneğin enemy varsa hasar verelim:
-                PlayerController2D playerScript = obj.GetComponent<PlayerController2D>();
+                CharacterController playerScript = obj.GetComponent<CharacterController>();
                 if (playerScript != null)
                 {
-                    playerScript.Die();
+                    //playerScript.Die();
                 }
             }
         }

@@ -70,7 +70,7 @@ public class NPC2Controller : NPCBase
                 }
             }
             // Uzaktan saldırı: oyuncu melee mesafesinin dışında fakat attackRange içindeyse projectile fırlat.
-            else if (absDeltaX <= attackRange && visibleKontrol.isVisible)
+            else if (absDeltaX <= attackRange)
             {
                 if (attackTimer <= 0f)
                 {

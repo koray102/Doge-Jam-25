@@ -11,7 +11,7 @@ public class ProjectileController : MonoBehaviour
 
     public LayerMask OyuncuLayer;
 
-    private PlayerController2D player;
+    //private PlayerController2D player;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class ProjectileController : MonoBehaviour
         col = GetComponent<Collider2D>();
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        player = playerObj.GetComponent<PlayerController2D>();
+        //player = playerObj.GetComponent<PlayerController2D>();
     }
 
     void Update()
@@ -36,7 +36,7 @@ public class ProjectileController : MonoBehaviour
         if (collision.transform.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
-            player.Die();
+            //player.Die();
         }
         if (!hasImpacted)
         {

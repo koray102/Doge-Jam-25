@@ -42,7 +42,7 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Animator animator;
 
-    protected CheckBackground visibleKontrol;
+    
 
     public Transform attackPoint;
 
@@ -56,7 +56,7 @@ public abstract class NPCBase : MonoBehaviour
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
-        visibleKontrol = player.gameObject.GetComponent<CheckBackground>();
+        
 
         ozelBaslangic();
     }
@@ -78,7 +78,7 @@ public abstract class NPCBase : MonoBehaviour
                     animator.SetBool("IsChasing", false);
                 }
                 Patrol();
-                if (IsPlayerDetected() && (visibleKontrol.isVisible || gameObject.CompareTag("NPC-3")))
+                if (IsPlayerDetected() && (gameObject.CompareTag("NPC-3")))
                 {   
                     
                     state = NPCState.Chase;
@@ -111,11 +111,11 @@ public abstract class NPCBase : MonoBehaviour
         RaycastHit2D hitUpper = Physics2D.Raycast(originUpper, facingDirection, detectionRange, detectionLayerMask);
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
 
-        Debug.Log(visibleKontrol.isVisible);
+        
         
 
         return ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player") ||
-               (hitLower.collider != null && hitLower.collider.CompareTag("Player"))) && (visibleKontrol.isVisible || gameObject.CompareTag("NPC-3")));
+               (hitLower.collider != null && hitLower.collider.CompareTag("Player"))) && (gameObject.CompareTag("NPC-3")));
     }
 
     protected void UpdateSpriteFlip()
