@@ -1,17 +1,40 @@
 using UnityEngine;
+using System.Collections;
 
 public class NPC1Controller : NPCBase
 {
+    [Header("NPC-1 Özel Ayarlar")]
+    // Devriye noktaları (sadece NPC1 kullanıyor)
+    public Transform[] patrolPoints;
+    protected int currentPatrolIndex = 0;
+    public float patrolSpeed = 2f;
+
+    // Fake attack ve zeka ile ilgili ayarlar
+    public float fakeAttackDelay = 1f; // Fake saldırı sırasında bekleme süresi
+    public float intelligenceThresholdForFakeAttack = 50f; // Fake saldırının devreye gireceği zeka eşiği
+    public float fakeAttackProbability = 0.5f; // Fake saldırı olasılığı
+
+    [Header("Hologram Ayarları")]
+    public float hologramDetectionRange = 5f; // Hologramı algılama mesafesi
+    public float hologramIntelligenceThreshold = 50f; // Zekası yüksekse; holograma saldırdıktan sonra tekrar saldırmama
+
+    private bool justPerformedFakeAttack = false;
+    private bool hologramAttacked = false;
+
+    protected override void OzelBaslangic()
+    {
+        // İsteğe bağlı ek başlangıç işlemleri
+    }
+
     protected override void Patrol()
     {
-   
-
-        if (patrolPoints.Length == 0)
+        if (patrolPoints == null || patrolPoints.Length == 0)
             return;
 
         Transform targetPoint = patrolPoints[currentPatrolIndex];
         if (Vector2.Distance(transform.position, targetPoint.position) > 2f)
         {
+            // Hedefe doğru yön belirle (orijinal algoritma korunuyor)
             facingDirection = (targetPoint.position.x - transform.position.x) >= 0 ? Vector2.right : Vector2.left;
             lastFacingDirection = facingDirection;
             transform.position = Vector2.MoveTowards(transform.position, targetPoint.position, patrolSpeed * Time.deltaTime);
@@ -23,113 +46,131 @@ public class NPC1Controller : NPCBase
         }
     }
 
-    protected override void OzelBaslangic()
-    {
-
-    }
     protected override void ChaseAndAttack()
     {
+        float deltaX = player.position.x - transform.position.x;
+        bool detected = IsPlayerDetected();
 
-                // NPC ile oyuncu aras�ndaki yatay mesafeyi hesapla
-            float deltaX = player.position.x - transform.position.x;
+        if (detected)
+        {
+            chaseTimer = chaseMemoryTime;
+            facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
+            lastFacingDirection = facingDirection;
 
-            // Oyuncunun tespit edilip edilmedi�ini kontrol et
-            bool detected = IsPlayerDetected();
-
-            if (detected)
+            if (Mathf.Abs(deltaX) > attackRange)
             {
-            
-                // Chase zamanlay�c�s�n� s�f�rla
-                chaseTimer = chaseMemoryTime;
-
-            // NPC'nin bak�� y�n�n� belirle
-
-                facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
-                lastFacingDirection = facingDirection;
-
-                // E�er oyuncu sald�r� menzilinin d���ndaysa, ancak menzile yak�nsa, NPC'yi oyuncunun x pozisyonuna do�ru hareket ettir
-                if (Mathf.Abs(deltaX) > attackRange)
+                Vector2 newPos = transform.position;
+                newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
+                transform.position = newPos;
+            }
+            else
+            {
+                // Eğer daha önce fake attack yaptıysak, sonraki saldırı normal olmalı.
+                if (justPerformedFakeAttack)
                 {
-                    Vector2 newPos = transform.position;
-                    newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
-                    transform.position = newPos;
+                    AttackPlayer();
+                    attackTimer = attackCooldown;
+                    justPerformedFakeAttack = false;
                 }
-                else
+                else if (attackTimer <= 0f)
                 {
-                    // Sald�r� menzilindeyse, sald�r� zamanlay�c�s�n� kontrol et
-                    if (attackTimer <= 0f)
+                    // Eğer zeka eşiğinin üzerindeyse ve olasılık uymuşsa fake attack yap.
+                    if (intelligence >= intelligenceThresholdForFakeAttack && Random.value < fakeAttackProbability)
                     {
-                        // Sald�r�y� ger�ekle�tir
-                        AttackPlayer();
-                        // Sald�r� sonras� bekleme s�resini ayarla
-                        attackTimer = attackCooldown;
+                        StartCoroutine(FakeAttackRoutine());
+                        justPerformedFakeAttack = true;
                     }
                     else
                     {
-                        // Sald�r� zamanlay�c�s�n� azalt
-                        attackTimer -= Time.deltaTime;
+                        AttackPlayer();
+                        attackTimer = attackCooldown;
                     }
+                }
+                else
+                {
+                    attackTimer -= Time.deltaTime;
+                }
+            }
+        }
+        else
+        {
+            // Oyuncu algılanmıyorsa hologramı kontrol et.
+            GameObject hologram = FindHologram();
+            if (hologram != null)
+            {
+                if (intelligence >= hologramIntelligenceThreshold)
+                {
+                    if (!hologramAttacked)
+                    {
+                        AttackHologram(hologram);
+                        hologramAttacked = true;
+                    }
+                }
+                else
+                {
+                    AttackHologram(hologram);
                 }
             }
             else
             {
-                // Chase zamanlay�c�s�n� azalt
                 chaseTimer -= Time.deltaTime;
-
-                // NPC'nin bak�� y�n�n� belirle
-                facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
-                lastFacingDirection = facingDirection;
-
-                // Chase zamanlay�c�s� s�f�rdan b�y�kse, NPC'yi oyuncunun son bilinen x pozisyonuna do�ru hareket ettir
-                if (chaseTimer > 0f && Mathf.Abs(deltaX) > attackRange)
-                {
-                    Vector2 newPos = transform.position;
-                    newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
-                    transform.position = newPos;
-                }
-                else if (chaseTimer > 0f)
-                {
-
-                }
-                else
-                {
-                    // Chase zamanlay�c�s� s�f�ra ula�t�ysa, devriye moduna geri d�n
+                if (chaseTimer <= 0f)
                     state = NPCState.Patrol;
-                }
             }
-        
+        }
+    }
 
+    IEnumerator FakeAttackRoutine()
+    {
+        TriggerAttackAnimation();
+        Debug.Log("NPC1: Fake Attack başladı.");
+        yield return new WaitForSeconds(fakeAttackDelay);
+        Debug.Log("NPC1: Fake Attack tamamlandı.");
+    }
+
+    void AttackHologram(GameObject hologram)
+    {
+        TriggerAttackAnimation();
+        Debug.Log("NPC1: Hologram (" + hologram.name + ") saldırısı gerçekleştirildi.");
+        // İsteğe bağlı: holograma hasar verme kodu eklenebilir.
     }
 
     protected override void AttackPlayer()
     {
         TriggerAttackAnimation();
-        Debug.Log("NPC1: Player'a sald�r�ld�!");
+        Debug.Log("NPC1: Player'a saldırı gerçekleştirildi!");
 
-        // Attack alanındaki tüm objeleri alıyoruz (layer filtresi uygulamıyoruz ki hem enemy hem de bullet kontrol edilebilsin)
+        // Melee saldırı: attackPoint çevresindeki objelere (örneğin, Character layer) hasar verme
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
         foreach (Collider2D obj in hitObjects)
         {
-
             if (obj.gameObject.layer == LayerMask.NameToLayer("Character"))
             {
-                // Diğer objeler için, örneğin enemy varsa hasar verelim:
                 CharacterController playerScript = obj.GetComponent<CharacterController>();
                 if (playerScript != null)
                 {
-                    //playerScript.Die();
+                    // Örneğin: playerScript.TakeDamage(attackDamage);
                 }
             }
         }
-
     }
-
-
 
     public override void GetDamage()
     {
-        gameManagerScript.OlumOldu();
-        Destroy(gameObject);
+        // Örnek olarak 10 hasar veriliyor; bu değeri ihtiyaca göre ayarlayın.
+        TakeDamage(10f);
+    }
+
+    // Hologramı bulan yardımcı metot.
+    GameObject FindHologram()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, hologramDetectionRange);
+        foreach (Collider2D col in colliders)
+        {
+            if (col.CompareTag("Hologram"))
+                return col.gameObject;
+        }
+        return null;
     }
 
     private void OnDrawGizmos()

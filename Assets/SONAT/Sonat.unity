@@ -4995,6 +4995,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC-1
       objectReference: {fileID: 0}
+    - target: {fileID: 203146540716605023, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1677635238}
+    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: intelligence
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: detectionRange
+      value: 10.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: faceRightAtStart
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: gameManagerScript
       value: 
@@ -5007,6 +5027,10 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[1]'
       value: 
       objectReference: {fileID: 62902057}
+    - target: {fileID: 3970678998570524408, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5493454380172680209, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.561704
@@ -5045,22 +5069,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493454380172680209, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6029954386035956960, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6029954386035956960, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6029954386035956960, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6029954386035956960, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5113,15 +5121,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4516508102152981363, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1677635238}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: intelligence
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: detectionRange
+      value: 20.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: allowIdleTurning
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: gameManagerScript
       value: 
       objectReference: {fileID: 2127024569}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: fakeProjectilePrefab
+      value: 
+      objectReference: {fileID: 4020625525890682907, guid: a7380f740ef17b348baed6b9bda626de, type: 3}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: startDirectionIsRight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: 'patrolPoints.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1022694852}
+    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
+      propertyPath: 'patrolPoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 62902057}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -17.38
+      value: -16.48
       objectReference: {fileID: 0}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.y
