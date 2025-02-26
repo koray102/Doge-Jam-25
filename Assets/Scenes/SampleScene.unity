@@ -644,37 +644,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 547288813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1029372978
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1029372979}
-  m_Layer: 0
-  m_Name: Fire Point
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1029372979
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1029372978}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.598, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1705332629}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1312954711
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,75 +921,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1423381755
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1423381756}
-  - component: {fileID: 1423381757}
-  m_Layer: 0
-  m_Name: Easy Step Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1423381756
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1423381755}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.75, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1705332629}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!70 &1423381757
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1423381755}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1.46}
-  m_Direction: 0
 --- !u!1 &1659445453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,11 +1055,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!4 &1705332629 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-  m_PrefabInstance: {fileID: 3866476019987803406}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3866476019987803406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1208,51 +1103,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: firePoint
-      value: 
-      objectReference: {fileID: 1029372979}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: hitCamShake
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: dashCamShake
-      value: 0.07
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: projectileSpeed
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: easyStepCollider
-      value: 
-      objectReference: {fileID: 1423381755}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 6780768306653626045, guid: f7969fb7a4402f24f8dbf9b42ae47d93, type: 3}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: hitCamShakeDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: dashCamShakeDuration
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 7031847350801322427, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1423381756}
-    - targetCorrespondingSourceObject: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1029372979}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a104956727813cf45ae06b070afcb37e, type: 3}
 --- !u!1660057539 &9223372036854775807
