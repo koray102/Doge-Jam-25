@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -10,6 +11,7 @@ public class PlayerController2D : MonoBehaviour
     public float walkSpeed = 3f;
     public float runSpeed = 6f;
     public float jumpForce = 5f;
+    [SerializeField] private GameObject easyStepCollider;
 
 
     [Header("Ground Check")]
@@ -71,6 +73,21 @@ public class PlayerController2D : MonoBehaviour
 
     [Header("Combo Settings")]
     public float comboTimeout = 1f; // Komboyu devam ettirmek için max bekleme süresi
+
+    
+    [Header("Fire Projectile Settings")]
+    public GameObject projectilePrefab; // Fırlatılacak prefab
+    public Transform firePoint; // Fırlatma noktası (örneğin karakterin elinin bulunduğu nokta)
+    public float projectileSpeed = 10f; // Fırlatma hızı
+    public float fireCooldown = 1f; // Ateş etme arası bekleme süresi
+    public int projectileAmount = 5; // Ateş etme arası bekleme süresi
+    private float fireTimer = 0f;
+    public KeyCode FireProjectileeKey = KeyCode.T;
+
+
+    [Header("Slow Down Settings")]
+    public float slowFactor = 0.2f;
+    public float slowDuration = 0.5f; // Yavaşlatmanın süresi (saniye cinsinden, zaman ölçeğinden bağımsız olarak real time)
 
 
     [Header("Audio Settings")]
@@ -141,9 +158,24 @@ public class PlayerController2D : MonoBehaviour
             }
         }
 
+        if(_isGrounded)
+        {
+            easyStepCollider.SetActive(true);
+        }else
+        {
+            easyStepCollider.SetActive(false);
+        }
+
+
         if (Input.GetKeyDown(KeyCode.P))
         {
             Die();
+        }
+
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            ActivateSlowTime();
         }
 
         // Saldırı
@@ -216,6 +248,17 @@ public class PlayerController2D : MonoBehaviour
         {
             wallBounceFacingTimer -= Time.deltaTime;
         }
+
+
+        if(Input.GetKeyDown(FireProjectileeKey) && fireTimer <= 0f && projectileAmount > 0)
+        {
+            FireProjectile();
+            fireTimer = fireCooldown; // Ateş ettikten sonra cooldown süresini ayarla.
+            projectileAmount--;
+        }
+
+        if (fireTimer > 0f)
+        fireTimer -= Time.deltaTime;
 
         UpdateAnimator();
     }
@@ -444,7 +487,7 @@ public class PlayerController2D : MonoBehaviour
         _attackTimer = attackCooldown;
 
         // Hangi saldırı tipiyse, Animator'da ilgili trigger'ı tetikle
-        if (_anim)
+        if (_anim = null)
         {
             // Aynı karede tetiklenme karışmasın diye önce resetliyoruz
             _anim.ResetTrigger("Attack1");
@@ -482,6 +525,7 @@ public class PlayerController2D : MonoBehaviour
 
     private void PerformAttack()
     {
+        Debug.Log("Saldiri");
         // Attack alanındaki tüm objeleri alıyoruz (layer filtresi uygulamıyoruz ki hem enemy hem de bullet kontrol edilebilsin)
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
         foreach (Collider2D obj in hitObjects)
@@ -509,6 +553,10 @@ public class PlayerController2D : MonoBehaviour
                 /*NPCBase enemyScript = obj.GetComponent<NPCBase>();
                 if (enemyScript != null)
                 {
+                    BURAYA EGER DUSMAN DA SALDIRIYORSA (BOOLEANLA KONTROL EDERSIN)
+                    PerryAttack();
+
+                    ActivateSlowTime();
                     enemyScript.GetDamage();
 
                     SoundManager.PlaySound(SoundManager.soundType.HitEnemy);
@@ -523,6 +571,42 @@ public class PlayerController2D : MonoBehaviour
     private void ResetAttack()
     {
         _isAttacking = false;
+    }
+
+    #endregion
+
+
+    #region Perry Attack
+
+    private void PerryAttack()
+    {
+        // Bir de bi partticle efekt koymak lazim
+        SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
+
+        CancelInvoke(nameof(ResetAttack));
+        ResetAttack();
+    }
+
+
+    #endregion
+
+
+    #region Fire Projectile
+
+    public void FireProjectile()
+    {
+        // Prefab'i firePoint konumunda instantiate ediyoruz.
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        
+        // Karakterin baktığı yönü belirleyelim (örneğin, scale.x pozitifse sağ, negatifse sol)
+        float direction = Mathf.Sign(transform.localScale.x);
+        
+        // Eğer projectile'da Rigidbody2D varsa, ona hız atayarak fırlatalım:
+        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        if(rb != null)
+        {
+            rb.linearVelocity = new Vector2(direction * projectileSpeed, 0f);
+        }
     }
 
     #endregion
@@ -556,11 +640,38 @@ public class PlayerController2D : MonoBehaviour
 
         SoundManager.PlaySound(SoundManager.soundType.Death, 0.8f);
         
-        _anim.SetTrigger("Die");
+        if(_anim != null)
+        {
+            _anim.SetTrigger("Die");
+        }
     }
 
     #endregion
 
+
+    #region Slow Down
+
+    public void ActivateSlowTime()
+    {
+        StartCoroutine(SlowTimeCoroutine());
+    }
+
+    private IEnumerator SlowTimeCoroutine()
+    {
+        // Zamanı yavaşlat
+        Time.timeScale = slowFactor;
+        // FixedUpdate için zaman adımını da yavaşlatmak önemlidir
+        Time.fixedDeltaTime = 0.02f * slowFactor;
+
+        // Belirtilen süre kadar bekle (real time, yani zaman ölçeğinden etkilenmez)
+        yield return new WaitForSecondsRealtime(slowDuration);
+
+        // Zamanı tekrar normale döndür
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+    }
+
+    #endregion
 
     #region  Gizmos Debug
     private void OnDrawGizmosSelected()

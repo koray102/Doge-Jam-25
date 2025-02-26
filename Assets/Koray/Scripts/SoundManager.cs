@@ -11,7 +11,8 @@ public class SoundManager : MonoBehaviour
         Attack3,
         Dash,
         HitEnemy,
-        Death
+        Death,
+        Perry
     }
 
     [SerializeField] private List<AudioClip> soundList;
@@ -33,6 +34,11 @@ public class SoundManager : MonoBehaviour
 
     internal static void PlaySound(soundType sound, float volume = 1)
     {
-        soundManagerInstance.audioSource.PlayOneShot(soundManagerInstance.soundList[(int)sound], volume);
+        int index = (int)sound;
+        if (soundManagerInstance != null && soundManagerInstance.soundList != null && 
+            index >= 0 && index < soundManagerInstance.soundList.Count)
+        {
+            soundManagerInstance.audioSource.PlayOneShot(soundManagerInstance.soundList[index], volume);
+        }
     }
 }
