@@ -4,41 +4,31 @@ public class NPC2Controller : NPCBase
 {
     [Header("NPC-2 Özel Ayarlar")]
     public bool allowIdleTurning = true;
-    
     public float idleTurnInterval = 2f;
     private float idleTurnTimer = 0f;
-    public GameObject projectilePrefab;
-    public Transform projectileSpawnPoint;
-    public float projectileSpeed = 5f;
-    
-    
 
+    public GameObject projectilePrefab;
+    public GameObject fakeProjectilePrefab; // Fake projectile için ek prefab
+    public Transform projectileSpawnPoint;
+
+    public float projectileSpeed = 5f; // Proje hızı sabit
+
+    // Firing rate ayarları: temel atış aralığı ve zeka etkisiyle rastgele değişen sapma
+    public float baseFiringInterval = 1f;
+    public float firingIntervalVariation = 0.5f;
+    public float minFiringInterval = 0.3f;
 
     protected override void OzelBaslangic()
-    {   
-        
-        Debug.Log("bok1111111");
+    {
         TriggerAttackAnimation();
         if (projectilePrefab != null && projectileSpawnPoint != null)
-        {
-
-            GameObject proj = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
-            Rigidbody2D projRb = proj.GetComponent<Rigidbody2D>();
-            if (projRb != null)
-            {
-                // İniş hızı veriliyor (velocity kullanıyoruz)
-                projRb.linearVelocity = facingDirection * projectileSpeed;
-            }
-            Debug.Log("NPC2: Projectile fırlatıldı.");
-        }
+            ShootProjectile();
     }
+
     protected override void Patrol()
     {
-        // NPC2 devriye modunda hareket etmez, sabit durur.
-        // Idle turning açıksa, belirli aralıklarla yönünü tersine çevirir.
         if (allowIdleTurning)
         {
-   
             idleTurnTimer -= Time.deltaTime;
             if (idleTurnTimer <= 0f)
             {
@@ -51,66 +41,71 @@ public class NPC2Controller : NPCBase
 
     protected override void ChaseAndAttack()
     {
+        float deltaX = player.position.x - transform.position.x;
+        float absDeltaX = Mathf.Abs(deltaX);
 
-            float deltaX = player.position.x - transform.position.x;
-            float absDeltaX = Mathf.Abs(deltaX);
+        facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
+        lastFacingDirection = facingDirection;
 
-            // Her zaman oyuncuya bak, sadece x ekseninde hizalan.
-            facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
-            lastFacingDirection = facingDirection;
+        // Rastgele, düzensiz atış aralığı hesaplaması: her atış sonrası yeni rastgele değer oluşturulur.
+        float randomOffset = Random.Range(-firingIntervalVariation, firingIntervalVariation) * intelligence;
+        float randomFiringInterval = Mathf.Clamp(baseFiringInterval + randomOffset, minFiringInterval, baseFiringInterval + firingIntervalVariation);
 
-            // Eğer oyuncu melee menzili içindeyse melee saldırısı yap.
-            if (absDeltaX <= attackRange)
+        if (absDeltaX <= attackRange)
+        {
+            if (attackTimer <= 0f)
             {
-                if (attackTimer <= 0f)
-                {
-                    ShootProjectile();
-                    attackTimer = attackCooldown;
-                }
-                else
-                {
-                    attackTimer -= Time.deltaTime;
-                }
+                ShootProjectile();
+                attackTimer = randomFiringInterval;
             }
             else
             {
-                // Eğer oyuncu attackRange dışında ise sadece oyuncuya bakmaya devam et.
-                chaseTimer -= Time.deltaTime;
-                if (chaseTimer <= 0f)
-                {
-                    state = NPCState.Patrol;
-                }
-            
-
+                attackTimer -= Time.deltaTime;
             }
-
+        }
+        else
+        {
+            // Chase zamanı bitse dahi, NPC2 her zaman oyuncunun x konumuna yaklaşmaya çalışır.
+            Vector2 newPos = transform.position;
+            newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
+            transform.position = newPos;
+            if (attackTimer > 0f)
+                attackTimer -= Time.deltaTime;
+        }
     }
 
     protected override void AttackPlayer()
     {
-        // Bu metot varsayılan saldırı için kullanılabilir; NPC2 için ayrı melee veya ranged metotlar kullanıyoruz.
         TriggerAttackAnimation();
     }
 
     void ShootProjectile()
     {
         TriggerAttackAnimation();
-        if (projectilePrefab != null && projectileSpawnPoint != null)
+        if (projectileSpawnPoint != null)
         {
-  
-            GameObject proj = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.Euler(0,0,Random.Range(0, 360)));
+            // Zeka arttıkça fake projectile şansı lineer olarak %50'ye kadar artar.
+            float fakeChance = Mathf.Clamp(intelligence * 0.5f, 0f, 0.5f);
+            GameObject projToShoot = projectilePrefab;
+            if (Random.value < fakeChance && fakeProjectilePrefab != null)
+            {
+                projToShoot = fakeProjectilePrefab;
+                Debug.Log("NPC2: Fake projectile fırlatılıyor.");
+            }
+            else
+            {
+                Debug.Log("NPC2: Gerçek projectile fırlatılıyor.");
+            }
+
+            GameObject proj = Instantiate(projToShoot, projectileSpawnPoint.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
             Rigidbody2D projRb = proj.GetComponent<Rigidbody2D>();
             if (projRb != null)
-            {
-                // İniş hızı veriliyor (velocity kullanıyoruz)
                 projRb.linearVelocity = facingDirection * projectileSpeed;
-            }
-            Debug.Log("NPC2: Projectile fırlatıldı.");
         }
     }
-    public override void GetDamage()
+
+    public override void GetDamage(float damage)
     {
-        gameManagerScript.OlumOldu();
-        Destroy(gameObject);
+        TakeDamage(damage);
     }
 }

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 270294040031133370}
   - component: {fileID: 1493195291048073188}
   m_Layer: 11
-  m_Name: NPC-1
+  m_Name: NPC-YAKIN
   m_TagString: NPC-1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

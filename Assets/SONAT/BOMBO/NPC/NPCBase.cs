@@ -1,8 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class NPCBase : MonoBehaviour
 {
+    [Header("NPC Stats")]
+    public float health = 100f;
+    public float intelligence = 0f; // Inspector üzerinden ayarlanabilir
+
     [Header("Hareket Ayarları")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 3f;
@@ -39,46 +42,47 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
+    // Oyun başlamadan bakacağı yönü belirleyebilmek için:
     public bool startDirectionIsRight = true;
 
     protected Animator animator;
 
-    
-
     public Transform attackPoint;
 
-    public GameManagerScript gameManagerScript;
+    private GameManagerScript gameManagerScript;
 
     protected virtual void Start()
     {
-        
+        // Başlangıç yönü ayarı
         if (startDirectionIsRight)
-        {
             facingDirection = Vector2.right;
-        }
         else
-        {
             facingDirection = Vector2.left;
-        }
 
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>(); // Animator bileşenini alıyoruz.
+        animator = GetComponent<Animator>();
+
+        // Oyuncu bulunuyor.
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
 
+        // GameManager, tagi "GameManager" olan objeden alınıyor.
+        if (gameManagerScript == null)
+        {
+            GameObject gmObj = GameObject.FindGameObjectWithTag("GameManager");
+            if (gmObj != null)
+                gameManagerScript = gmObj.GetComponent<GameManagerScript>();
+        }
+
         OzelBaslangic();
-        
     }
 
     protected virtual void Update()
     {
-        
-
         if (player == null)
             return;
-        
 
         if (groundCheck != null)
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
@@ -93,8 +97,7 @@ public abstract class NPCBase : MonoBehaviour
                 }
                 Patrol();
                 if (IsPlayerDetected())
-                {   
-                    
+                {
                     state = NPCState.Chase;
                     chaseTimer = chaseMemoryTime;
                     chaseDirectionSign = (player.position.x - transform.position.x) >= 0 ? 1 : -1;
@@ -106,19 +109,12 @@ public abstract class NPCBase : MonoBehaviour
                     animator.SetBool("IsPatrolling", false);
                     animator.SetBool("IsChasing", true);
                 }
-
                 ChaseAndAttack();
-                
-
-               
-                    
                 break;
         }
-
-        
         UpdateSpriteFlip();
     }
-    
+
     protected bool IsPlayerDetected()
     {
         Vector2 originUpper = (Vector2)transform.position + Vector2.up * detectionRayOffset;
@@ -126,53 +122,49 @@ public abstract class NPCBase : MonoBehaviour
         RaycastHit2D hitUpper = Physics2D.Raycast(originUpper, facingDirection, detectionRange, detectionLayerMask);
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
 
-        
-        
-
-        return ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player") ||
-               (hitLower.collider != null && hitLower.collider.CompareTag("Player"))));
+        return ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player")) ||
+                (hitLower.collider != null && hitLower.collider.CompareTag("Player")));
     }
 
     protected void UpdateSpriteFlip()
     {
-        float kalinlik = 1f;
-
-        if (gameObject.CompareTag("NPC-1"))
-        {
-            kalinlik = 1f;
-        }else if (gameObject.CompareTag("NPC-2"))
-        {
-            kalinlik = 1f;
-        }
+        float scaleFactor = 1f;
         if (spriteRenderer != null)
         {
-            // E�er NPC'nin bak�� y�n� sola ise flipX true olur.
-            if(facingDirection.x < 0)
-            {
-                gameObject.transform.localScale = new Vector3(-1 * kalinlik, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-            }else if (facingDirection.x > 0)
-            {
-                gameObject.transform.localScale = new Vector3(kalinlik, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-            }
-
+            if (facingDirection.x < 0)
+                transform.localScale = new Vector3(-1 * scaleFactor, transform.localScale.y, transform.localScale.z);
+            else if (facingDirection.x > 0)
+                transform.localScale = new Vector3(scaleFactor, transform.localScale.y, transform.localScale.z);
         }
     }
 
-    // Saldırı sırasında kullanılacak animasyonu tetikleyen yardımcı metot.
     protected void TriggerAttackAnimation()
     {
         if (animator != null)
-        {
             animator.SetTrigger("Attack");
-        }
     }
 
-    // Türetilen sınıflarda (ör. NPC1, NPC2) uygulanması gereken metotlar:
+    // Hasar yeme fonksiyonu
+    public virtual void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+            Die();
+    }
+
+    protected virtual void Die()
+    {
+        if (gameManagerScript != null)
+            gameManagerScript.OlumOldu();
+        Destroy(gameObject);
+    }
+
+    // Türetilen sınıfların uygulaması gereken metotlar:
     protected abstract void Patrol();
     protected abstract void OzelBaslangic();
     protected abstract void ChaseAndAttack();
     protected abstract void AttackPlayer();
-    public abstract void GetDamage();
+    public abstract void GetDamage(float damage); // Parametre alan şekilde güncellendi
 
     void OnDrawGizmosSelected()
     {
