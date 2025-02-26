@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 8183877292847940923}
   - component: {fileID: 2251337805955106193}
   m_Layer: 11
-  m_Name: NPC-2
+  m_Name: NPC-UZAKCI
   m_TagString: NPC-2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,7 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314c312dd4c66414aba0ee465226df67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolSpeed: 2
   chaseSpeed: 3
   detectionRange: 40
   attackRange: 40
@@ -220,22 +219,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 3149824
   chaseMemoryTime: 2
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
   groundCheck: {fileID: 2305155984103685758}
   groundCheckRadius: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 1048576
+  health: 100
+  intelligence: 0
   startDirectionIsRight: 0
   attackPoint: {fileID: 0}
   gameManagerScript: {fileID: 0}
   allowIdleTurning: 0
   idleTurnInterval: 2
   projectilePrefab: {fileID: 4020625525890682907, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
+  fakeProjectilePrefab: {fileID: 0}
   projectileSpawnPoint: {fileID: 1700636281221557612}
   projectileSpeed: 5
+  minProjectileAttackCooldown: 1
+  maxProjectileAttackCooldown: 2
 --- !u!95 &2251337805955106193
 Animator:
   serializedVersion: 7

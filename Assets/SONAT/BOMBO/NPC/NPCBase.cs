@@ -1,9 +1,13 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class NPCBase : MonoBehaviour
 {
+    [Header("NPC Stats")]
+    public float health = 100f;
+    public float intelligence = 0f; // Inspector üzerinden ayarlanabilir
+
     [Header("Hareket Ayarları")]
+    public float patrolSpeed = 2f;
     public float chaseSpeed = 3f;
 
     [Header("Algılama ve Saldırı")]
@@ -19,16 +23,15 @@ public abstract class NPCBase : MonoBehaviour
     protected float chaseTimer = 0f;
     protected int chaseDirectionSign = 0;
 
+    [Header("Devriye Noktaları")]
+    public Transform[] patrolPoints;
+    protected int currentPatrolIndex = 0;
 
     [Header("Yer Kontrolü")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     protected bool isGrounded;
-
-    [Header("NPC Statları")]
-    public float health = 100f;
-    public float intelligence = 0f;
 
     protected Transform player;
     protected Rigidbody2D rb;
@@ -39,33 +42,39 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
+    // Oyun başlamadan bakacağı yönü belirleyebilmek için:
     public bool startDirectionIsRight = true;
 
     protected Animator animator;
 
     public Transform attackPoint;
 
-    public GameManagerScript gameManagerScript;
+    private GameManagerScript gameManagerScript;
 
     protected virtual void Start()
     {
         // Başlangıç yönü ayarı
-        facingDirection = startDirectionIsRight ? Vector2.right : Vector2.left;
-        lastFacingDirection = facingDirection;
+        if (startDirectionIsRight)
+            facingDirection = Vector2.right;
+        else
+            facingDirection = Vector2.left;
 
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>(); // Animator bileşeni alınıyor.
+        animator = GetComponent<Animator>();
 
-        // Player objesini "Player" tag'iyle ara.
+        // Oyuncu bulunuyor.
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
 
-        // GameManagerScript'i "GameManager" tag'iyle ara.
-        GameObject gmObj = GameObject.FindGameObjectWithTag("GameManager");
-        if (gmObj != null)
-            gameManagerScript = gmObj.GetComponent<GameManagerScript>();
+        // GameManager, tagi "GameManager" olan objeden alınıyor.
+        if (gameManagerScript == null)
+        {
+            GameObject gmObj = GameObject.FindGameObjectWithTag("GameManager");
+            if (gmObj != null)
+                gameManagerScript = gmObj.GetComponent<GameManagerScript>();
+        }
 
         OzelBaslangic();
     }
@@ -74,9 +83,6 @@ public abstract class NPCBase : MonoBehaviour
     {
         if (player == null)
             return;
-
-        // Debug: Mevcut state bildirimi
-        Debug.Log($"{gameObject.name} state: {state}");
 
         if (groundCheck != null)
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
@@ -106,30 +112,29 @@ public abstract class NPCBase : MonoBehaviour
                 ChaseAndAttack();
                 break;
         }
-
         UpdateSpriteFlip();
     }
 
-    // Oyuncu algılama: Sadece NPC'nin önüne (facingDirection) doğru, yukarı ve aşağı offsetli raycast kullanılır.
     protected bool IsPlayerDetected()
     {
         Vector2 originUpper = (Vector2)transform.position + Vector2.up * detectionRayOffset;
         Vector2 originLower = (Vector2)transform.position - Vector2.up * detectionRayOffset;
         RaycastHit2D hitUpper = Physics2D.Raycast(originUpper, facingDirection, detectionRange, detectionLayerMask);
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
+
         return ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player")) ||
                 (hitLower.collider != null && hitLower.collider.CompareTag("Player")));
     }
 
     protected void UpdateSpriteFlip()
     {
-        float kalinlik = 1f;
+        float scaleFactor = 1f;
         if (spriteRenderer != null)
         {
             if (facingDirection.x < 0)
-                transform.localScale = new Vector3(-1 * kalinlik, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-1 * scaleFactor, transform.localScale.y, transform.localScale.z);
             else if (facingDirection.x > 0)
-                transform.localScale = new Vector3(kalinlik, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(scaleFactor, transform.localScale.y, transform.localScale.z);
         }
     }
 
@@ -139,11 +144,11 @@ public abstract class NPCBase : MonoBehaviour
             animator.SetTrigger("Attack");
     }
 
-    // Hasar alma işlemi
+    // Hasar yeme fonksiyonu
     public virtual void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0f)
+        if (health <= 0)
             Die();
     }
 
@@ -154,12 +159,12 @@ public abstract class NPCBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Türeyen sınıflarda (NPC1, NPC2) uygulanması gereken metotlar:
+    // Türetilen sınıfların uygulaması gereken metotlar:
     protected abstract void Patrol();
     protected abstract void OzelBaslangic();
     protected abstract void ChaseAndAttack();
     protected abstract void AttackPlayer();
-    public abstract void GetDamage();
+    public abstract void GetDamage(float damage); // Parametre alan şekilde güncellendi
 
     void OnDrawGizmosSelected()
     {

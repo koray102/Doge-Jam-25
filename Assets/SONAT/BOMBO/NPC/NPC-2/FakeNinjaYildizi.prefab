@@ -169,4 +169,4 @@ MonoBehaviour:
   lifetimeAfterImpact: 60
   shouldPauseOnProximity: 1
   pauseDistance: 3
-  pauseDuration: 1
+  pauseDuration: 0.5
