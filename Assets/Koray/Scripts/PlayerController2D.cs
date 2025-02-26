@@ -607,19 +607,18 @@ public class PlayerController2D : MonoBehaviour
             else
             {
                 // Diğer objeler için, örneğin enemy varsa hasar verelim:
-                /*NPCBase enemyScript = obj.GetComponent<NPCBase>();
+                NPCBase enemyScript = obj.GetComponent<NPCBase>();
                 if (enemyScript != null)
                 {
-                    BURAYA EGER DUSMAN DA SALDIRIYORSA (BOOLEANLA KONTROL EDERSIN)
                     PerryAttack();
 
                     ActivateSlowTime();
-                    enemyScript.GetDamage();
+                    enemyScript.TakeDamage(50f);
 
                     SoundManager.PlaySound(SoundManager.soundType.HitEnemy);
 
                     StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
-                }*/
+                }
             }
         }
     }

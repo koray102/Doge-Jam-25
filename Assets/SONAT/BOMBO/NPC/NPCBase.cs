@@ -128,7 +128,7 @@ public abstract class NPCBase : MonoBehaviour
 
     protected void UpdateSpriteFlip()
     {
-        float scaleFactor = 1f;
+        float scaleFactor = transform.localScale.x;
         if (spriteRenderer != null)
         {
             if (facingDirection.x < 0)
