@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 4105998709136020953}
   m_Layer: 22
   m_Name: Flower
-  m_TagString: Untagged
+  m_TagString: Hologram
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
