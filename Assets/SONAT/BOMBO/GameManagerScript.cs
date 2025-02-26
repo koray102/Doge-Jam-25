@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 public class GameManagerScript : MonoBehaviour
 {
 
@@ -15,10 +16,16 @@ public class GameManagerScript : MonoBehaviour
     private float minTransition = -1f;
     private float maxTransition = 1f;
 
-    public SeviyeTamamlanmaControll SeviyeTamamlanmaControll;
+
+    private bool SeviyeGoreviBitti = false;
+    public ParticleSystem duman;
+
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        duman.Stop();
+
         TransitionMat.SetFloat("_MaskAmount", maskAmount);
         currentScene = SceneManager.GetActiveScene();
 
@@ -85,11 +92,52 @@ public class GameManagerScript : MonoBehaviour
 
     public void OlumOldu()
     {
-        if (SeviyeTamamlanmaControll.SeviyeBittiMi())
+        if (SeviyeBittiMi())
         {
-            SeviyeTamamlanmaControll.SeviyeBittiEffectleriniAc();
+            SeviyeBittiEffectleriniAc();
         }
     }
 
-    
+
+    public bool SeviyeBittiMi()
+    {
+        string npcLayerName = "NPC";
+        // NPC layer'ının indeksini alın
+        int npcLayer = LayerMask.NameToLayer(npcLayerName);
+        // Hierarchy'deki tüm GameObject'leri alın
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+
+        // Parent objeleri tutmak için bir liste oluşturun
+        List<GameObject> parentObjects = new List<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            // Objeyi ve layer'ını kontrol edin
+            if (obj.layer == npcLayer && obj.transform.parent == null)
+            {
+                // Eğer obje NPC layer'ında ve parent'ı yoksa, listeye ekleyin
+                parentObjects.Add(obj);
+            }
+        }
+        Debug.Log(parentObjects.Count);
+
+        if (parentObjects.Count == 1 || parentObjects.Count < 1)
+        {
+
+            SeviyeBittiEffectleriniAc();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+
+    }
+    public void SeviyeBittiEffectleriniAc()
+    {
+        SeviyeGoreviBitti = true;
+        duman.Play();
+    }
+
 }

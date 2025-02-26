@@ -4,17 +4,20 @@ public class NPC2Controller : NPCBase
 {
     [Header("NPC-2 Özel Ayarlar")]
     public bool allowIdleTurning = true;
+    
     public float idleTurnInterval = 2f;
     private float idleTurnTimer = 0f;
     public GameObject projectilePrefab;
     public Transform projectileSpawnPoint;
     public float projectileSpeed = 5f;
-    public float meleeAttackRange = 0.5f;
+    
+    
 
 
-
-    protected override void ozelBaslangic()
-    {
+    protected override void OzelBaslangic()
+    {   
+        
+        Debug.Log("bok1111111");
         TriggerAttackAnimation();
         if (projectilePrefab != null && projectileSpawnPoint != null)
         {
@@ -57,20 +60,7 @@ public class NPC2Controller : NPCBase
             lastFacingDirection = facingDirection;
 
             // Eğer oyuncu melee menzili içindeyse melee saldırısı yap.
-            if (absDeltaX <= meleeAttackRange)
-            {
-                if (attackTimer <= 0f)
-                {
-                    MeleeAttack();
-                    attackTimer = attackCooldown;
-                }
-                else
-                {
-                    attackTimer -= Time.deltaTime;
-                }
-            }
-            // Uzaktan saldırı: oyuncu melee mesafesinin dışında fakat attackRange içindeyse projectile fırlat.
-            else if (absDeltaX <= attackRange)
+            if (absDeltaX <= attackRange)
             {
                 if (attackTimer <= 0f)
                 {
@@ -118,13 +108,6 @@ public class NPC2Controller : NPCBase
             Debug.Log("NPC2: Projectile fırlatıldı.");
         }
     }
-
-
-    void MeleeAttack()
-    {
-        Debug.Log("NPC2: Melee saldırı yapıldı!");
-    }
-
     public override void GetDamage()
     {
         gameManagerScript.OlumOldu();
