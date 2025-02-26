@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class NPCBase : MonoBehaviour
@@ -128,7 +129,7 @@ public abstract class NPCBase : MonoBehaviour
 
     protected void UpdateSpriteFlip()
     {
-        float scaleFactor = transform.localScale.x;
+        float scaleFactor = Mathf.Abs(transform.localScale.x);
         if (spriteRenderer != null)
         {
             if (facingDirection.x < 0)

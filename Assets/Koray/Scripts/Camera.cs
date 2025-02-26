@@ -17,8 +17,11 @@ public class Camera : MonoBehaviour
             float x = Random.Range(-1f, 1f) * magnitude;
             float y = Random.Range(-1f, 1f) * magnitude;
             mainCam.transform.localPosition = originalPos + new Vector3(x, y, 0);
-            elapsed += Time.deltaTime;
-            yield return null;
+
+            float delay = Time.unscaledDeltaTime / Time.timeScale;
+            yield return new WaitForSecondsRealtime(delay);
+            
+            elapsed += Time.unscaledDeltaTime;
         }
 
         mainCam.transform.localPosition = originalPos;

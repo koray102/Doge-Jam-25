@@ -610,14 +610,14 @@ public class PlayerController2D : MonoBehaviour
                 NPCBase enemyScript = obj.GetComponent<NPCBase>();
                 if (enemyScript != null)
                 {
-                    PerryAttack();
+                    //PerryAttack();
 
-                    ActivateSlowTime();
                     enemyScript.TakeDamage(50f);
 
                     SoundManager.PlaySound(SoundManager.soundType.HitEnemy);
 
                     StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
+                    ActivateSlowTime();
                 }
             }
         }
