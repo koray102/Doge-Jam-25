@@ -2,10 +2,14 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class NPCBase : MonoBehaviour
-{
+{   
+
+
     [Header("NPC Stats")]
     public float health = 100f;
     public float intelligence = 0f; // Inspector üzerinden ayarlanabilir
+    public float xThickness = 1f;
+    public bool startDirectionIsRight = true;
 
     [Header("Hareket Ayarları")]
     public float patrolSpeed = 2f;
@@ -44,7 +48,7 @@ public abstract class NPCBase : MonoBehaviour
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
     // Oyun başlamadan bakacağı yönü belirleyebilmek için:
-    public bool startDirectionIsRight = true;
+    
 
     protected Animator animator;
 
@@ -127,17 +131,19 @@ public abstract class NPCBase : MonoBehaviour
                 (hitLower.collider != null && hitLower.collider.CompareTag("Player")));
     }
 
+    
+
     protected void UpdateSpriteFlip()
     {
-        float scaleFactor = Mathf.Abs(transform.localScale.x);
         if (spriteRenderer != null)
         {
             if (facingDirection.x < 0)
-                transform.localScale = new Vector3(-1 * scaleFactor, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-Mathf.Abs(xThickness), transform.localScale.y, transform.localScale.z);
             else if (facingDirection.x > 0)
-                transform.localScale = new Vector3(scaleFactor, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(Mathf.Abs(xThickness), transform.localScale.y, transform.localScale.z);
         }
     }
+
 
     protected void TriggerAttackAnimation()
     {
