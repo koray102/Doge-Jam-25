@@ -23,8 +23,9 @@ public class NPC1Controller : NPCBase
         }
     }
 
-    protected override void ozelBaslangic()
+    protected override void OzelBaslangic()
     {
+
     }
     protected override void ChaseAndAttack()
     {

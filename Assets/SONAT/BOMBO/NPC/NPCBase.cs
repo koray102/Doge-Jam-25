@@ -39,6 +39,7 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
+    public bool startDirectionIsRight = true;
 
     protected Animator animator;
 
@@ -50,21 +51,34 @@ public abstract class NPCBase : MonoBehaviour
 
     protected virtual void Start()
     {
+        
+        if (startDirectionIsRight)
+        {
+            facingDirection = Vector2.right;
+        }
+        else
+        {
+            facingDirection = Vector2.left;
+        }
+
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>(); // Animator bileşenini alıyoruz.
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
-        
 
-        ozelBaslangic();
+        OzelBaslangic();
+        
     }
 
     protected virtual void Update()
     {
+        
+
         if (player == null)
             return;
+        
 
         if (groundCheck != null)
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
@@ -78,7 +92,7 @@ public abstract class NPCBase : MonoBehaviour
                     animator.SetBool("IsChasing", false);
                 }
                 Patrol();
-                if (IsPlayerDetected() && (gameObject.CompareTag("NPC-3")))
+                if (IsPlayerDetected())
                 {   
                     
                     state = NPCState.Chase;
@@ -101,6 +115,7 @@ public abstract class NPCBase : MonoBehaviour
                 break;
         }
 
+        
         UpdateSpriteFlip();
     }
     
@@ -115,7 +130,7 @@ public abstract class NPCBase : MonoBehaviour
         
 
         return ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player") ||
-               (hitLower.collider != null && hitLower.collider.CompareTag("Player"))) && (gameObject.CompareTag("NPC-3")));
+               (hitLower.collider != null && hitLower.collider.CompareTag("Player"))));
     }
 
     protected void UpdateSpriteFlip()
@@ -124,18 +139,10 @@ public abstract class NPCBase : MonoBehaviour
 
         if (gameObject.CompareTag("NPC-1"))
         {
-            kalinlik = 2f;
+            kalinlik = 1f;
         }else if (gameObject.CompareTag("NPC-2"))
         {
             kalinlik = 1f;
-        }
-        else if (gameObject.CompareTag("NPC-3"))
-        {
-            kalinlik = 1f;
-        }
-        else if (gameObject.CompareTag("NPC-4"))
-        {
-            kalinlik = 1.5f;
         }
         if (spriteRenderer != null)
         {
@@ -162,8 +169,7 @@ public abstract class NPCBase : MonoBehaviour
 
     // Türetilen sınıflarda (ör. NPC1, NPC2) uygulanması gereken metotlar:
     protected abstract void Patrol();
-
-    protected abstract void ozelBaslangic();
+    protected abstract void OzelBaslangic();
     protected abstract void ChaseAndAttack();
     protected abstract void AttackPlayer();
     public abstract void GetDamage();
