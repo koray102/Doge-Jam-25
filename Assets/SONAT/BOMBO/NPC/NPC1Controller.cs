@@ -13,6 +13,9 @@ public class NPC1Controller : NPCBase
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isFakeAttack = false;
 
+    // Saldırı bayraklarının ne kadar süre true kalacağını ayarlamak için public parametre:
+    public float attackFlagDuration = 0.3f;
+
     protected override void Patrol()
     {
         if (patrolPoints.Length == 0)
@@ -127,7 +130,7 @@ public class NPC1Controller : NPCBase
         }
         else
         {
-            // Zekaya bağlı fake saldırı olasılığı (maksimum %50)
+            // Zekaya bağlı fake saldırı olasılığını hesapla (maksimum %50)
             float computedFakeChance = Mathf.Clamp(intelligence * fakeAttackMultiplier, 0f, maxFakeAttackChance);
             if (Random.value < computedFakeChance)
             {
@@ -155,10 +158,10 @@ public class NPC1Controller : NPCBase
         forceRealAttackNext = true;
     }
 
-    // Saldırı bayraklarını kısa bir süre sonra resetler (örneğin, animasyon süresine göre ayarlanabilir)
+    // Saldırı bayraklarını attackFlagDuration kadar süre sonra resetler.
     private IEnumerator ResetAttackFlags()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(attackFlagDuration);
         isAttacking = false;
         isFakeAttack = false;
     }

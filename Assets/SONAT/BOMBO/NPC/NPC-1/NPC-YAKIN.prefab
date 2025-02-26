@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.49, y: -0.77, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.42, y: 0.84, z: 0.42}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2994503792278139313}
   - {fileID: 9066816224453161646}
@@ -181,13 +181,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   intelligence: 100
-  xThickness: 1
+  xThickness: 0.42
+  startDirectionIsRight: 1
   patrolSpeed: 2
   chaseSpeed: 3
   detectionRange: 10.8
   attackRange: 1.75
   attackCooldown: 1
-  detectionRayOffset: 0.6
+  detectionRayOffset: 0.26
   detectionLayerMask:
     serializedVersion: 2
     m_Bits: 3149824
@@ -200,13 +201,13 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1048576
-  startDirectionIsRight: 1
   attackPoint: {fileID: 9066816224453161646}
   fakeAttackDelay: 1
   fakeAttackMultiplier: 0.5
   maxFakeAttackChance: 0.5
   isAttacking: 0
   isFakeAttack: 0
+  attackFlagDuration: 0.3
 --- !u!95 &1493195291048073188
 Animator:
   serializedVersion: 7

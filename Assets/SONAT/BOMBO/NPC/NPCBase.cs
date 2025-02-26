@@ -8,6 +8,7 @@ public abstract class NPCBase : MonoBehaviour
     public float health = 100f;
     public float intelligence = 0f; // Inspector üzerinden ayarlanabilir
     public float xThickness = 1f;
+    public bool startDirectionIsRight = true;
 
     [Header("Hareket Ayarları")]
     public float patrolSpeed = 2f;
@@ -46,7 +47,7 @@ public abstract class NPCBase : MonoBehaviour
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
     // Oyun başlamadan bakacağı yönü belirleyebilmek için:
-    public bool startDirectionIsRight = true;
+    
 
     protected Animator animator;
 
