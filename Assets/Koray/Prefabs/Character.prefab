@@ -519,8 +519,12 @@ MonoBehaviour:
   walkSoundClip: {fileID: 0}
   dashCamShake: 0.07
   dashCamShakeDuration: 0.2
-  hitCamShake: 0.17
-  hitCamShakeDuration: 0.13
+  hitCamShake: 0.2
+  hitCamShakeDuration: 0.12
+  perryCamShake: 0.14
+  perryCamShakeDuration: 0.12
+  killCamShake: 0
+  killCamShakeDuration: 0
   attacking: 0
 --- !u!1 &7170068508468510057
 GameObject:

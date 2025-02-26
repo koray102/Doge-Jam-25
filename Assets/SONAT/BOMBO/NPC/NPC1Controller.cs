@@ -124,6 +124,8 @@ public class NPC1Controller : NPCBase
         {
             TriggerAttackAnimation();
             Debug.Log("NPC1: Gerçek saldırı (Player) gerçekleştirildi!");
+            player.gameObject.GetComponent<PlayerController2D>().Die();
+            
             forceRealAttackNext = false;
             isFakeAttack = false;
             StartCoroutine(ResetAttackFlags());

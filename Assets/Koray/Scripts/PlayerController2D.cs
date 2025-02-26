@@ -102,6 +102,10 @@ public class PlayerController2D : MonoBehaviour
     public float dashCamShakeDuration;
     public float hitCamShake;
     public float hitCamShakeDuration;
+    public float perryCamShake;
+    public float perryCamShakeDuration;
+    public float killCamShake;
+    public float killCamShakeDuration;
 
 
     private float comboTimer = 0f;
@@ -588,7 +592,7 @@ public class PlayerController2D : MonoBehaviour
         foreach (Collider2D obj in hitObjects)
         {
             // Eğer objenin layer'ı "bullet" ise:
-            if (obj.gameObject.layer == LayerMask.NameToLayer("Shuriken"))
+            if (obj.gameObject.layer == LayerMask.NameToLayer("BULLET"))
             {
                 Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
 
@@ -600,8 +604,7 @@ public class PlayerController2D : MonoBehaviour
                     Vector2 throwDirection = new Vector2(facing, Random.Range(-0.5f, 0.5f)).normalized;
                     rb.AddForce(throwDirection * bulletThrowForce, ForceMode2D.Impulse);
 
-                    
-                    StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
+                    StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
                 }
             }
             else
@@ -610,13 +613,30 @@ public class PlayerController2D : MonoBehaviour
                 NPCBase enemyScript = obj.GetComponent<NPCBase>();
                 if (enemyScript != null)
                 {
-                    //PerryAttack();
+                    // NPC 1 ise attack yapiyor mu kontrolu lazim
+                    if (enemyScript.TryGetComponent<NPC1Controller>(out NPC1Controller npc1Controller))
+                    {
+                        bool isNPCAttacking = npc1Controller.isAttacking;
+                        bool isNPCFaking = npc1Controller.isFakeAttack;
 
-                    enemyScript.TakeDamage(50f);
+                        // attack gercek ise perryle, degilse normal vurus yap
+                        if(isNPCAttacking && !isNPCFaking)
+                        {
+                            PerryAttack();
+                            StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
+                        }else
+                        {
+                            enemyScript.TakeDamage(50f);
+                            StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
+                        }
+                    }else // NPC 2 ise zaten perryleme olmayacagi icin normal vurus yap
+                    {
+                        enemyScript.TakeDamage(50f);
+                        StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
+                    }
 
                     SoundManager.PlaySound(SoundManager.soundType.HitEnemy);
 
-                    StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
                     ActivateSlowTime();
                 }
             }
@@ -637,6 +657,7 @@ public class PlayerController2D : MonoBehaviour
     private void PerryAttack()
     {
         // Bir de bi partticle efekt koymak lazim
+        Debug.Log("Perry");
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
 
         CancelInvoke(nameof(ResetAttack));
@@ -693,6 +714,7 @@ public class PlayerController2D : MonoBehaviour
             return;
 
         didDie = true;
+        _rb.linearVelocity = Vector2.zero;
 
         SoundManager.PlaySound(SoundManager.soundType.Death, 0.8f);
         
