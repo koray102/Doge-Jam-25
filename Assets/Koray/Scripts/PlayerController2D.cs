@@ -11,6 +11,8 @@ public class PlayerController2D : MonoBehaviour
     public float walkSpeed = 3f;
     public float runSpeed = 6f;
     public float jumpForce = 5f;
+    [SerializeField] private float stepHeight = 0.3f; // Karakterin atlayabileceği maksimum adım yüksekliği
+    [SerializeField] private float stepRayDistance = 0.2f; // Engeli algılamak için yatay raycast mesafesi
     [SerializeField] private GameObject easyStepCollider;
 
 
@@ -131,6 +133,8 @@ public class PlayerController2D : MonoBehaviour
     private float _wallBounceTimeLeft;
     private float _lastWallBounceTime;
 
+    public bool attacking;
+
 
     void Awake()
     {
@@ -158,13 +162,13 @@ public class PlayerController2D : MonoBehaviour
             }
         }
 
-        if(_isGrounded)
+        /*if(_isGrounded)
         {
             easyStepCollider.SetActive(true);
         }else
         {
             easyStepCollider.SetActive(false);
-        }
+        }*/
 
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -200,7 +204,11 @@ public class PlayerController2D : MonoBehaviour
         // Attack cooldown’u zamanla azalt
         if (_attackTimer > 0f)
         {
+            attacking = true;
             _attackTimer -= Time.deltaTime;
+        }else
+        {
+            attacking = false;
         }
 
         // Dash giriş (E tuşu)
@@ -275,6 +283,11 @@ public class PlayerController2D : MonoBehaviour
         // Duvar kontrolü
         CheckWall();
 
+        if(_isDashing)
+        {
+            HandleStep(stepRayDistance * 2);
+        }
+
         // Eğer dash, wall bounce veya saldırı durumunda normal hareket iptal edilsin
         if (_isDashing || _isWallBouncing || _isAttacking)
             return;
@@ -292,6 +305,8 @@ public class PlayerController2D : MonoBehaviour
             velocity.x = _horizontalInput * currentSpeed;
             _rb.linearVelocity = velocity;
         }
+
+        HandleStep(stepRayDistance);
 
         // Yön değiştirme (Sprite flip)
         if (_horizontalInput > 0 && transform.localScale.x < 0)
@@ -320,6 +335,47 @@ public class PlayerController2D : MonoBehaviour
             }
         }
     }
+
+
+    #region Step Handle
+
+    private void HandleStep(float _stepRayDistance)
+    {
+        // Yalnızca karakter hareket ediyorsa ve zemindeyse step kontrolü yapalım:
+        if (!_isGrounded || (Mathf.Abs(_horizontalInput) < 0.1f && !_isDashing))
+            return;
+        
+        // BoxCollider2D bileşenini alalım:
+        BoxCollider2D box = GetComponent<BoxCollider2D>();
+        if (box == null) return;
+        
+        // Karakterin hareket ettiği yönde, collider'ın alt sağ veya alt sol köşesinden raycast başlatıyoruz.
+        float direction = Mathf.Sign(_horizontalInput);
+        // Origin: collider'ın alt kenarının, hareket yönünde olan köşesi (biraz içeri offset ekleyerek)
+        Vector2 origin = new Vector2(box.bounds.center.x + direction * box.bounds.extents.x, box.bounds.min.y + 0.01f);
+        
+        // Alt köşeden, hareket yönünde bir raycast yapıyoruz:
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.right * direction, _stepRayDistance, groundLayer);
+        
+        // Eğer engel algılanırsa, üstteki boşluğu kontrol etmek için origin'i stepHeight kadar yukarı kaydırıp raycast yapalım:
+        if (hit)
+        {
+            Vector2 upperOrigin = new Vector2(origin.x, origin.y + stepHeight);
+            RaycastHit2D upperHit = Physics2D.Raycast(upperOrigin, Vector2.right * direction, _stepRayDistance, groundLayer);
+            
+            // Eğer üstte engel yoksa, karakteri adım atacak şekilde yukarı taşıyalım:
+            if (upperHit.collider == null)
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y + stepHeight, transform.position.z);
+            }
+        }
+        
+        // (Opsiyonel:) Debug çizgileri ile raycastleri görebilirsiniz:
+        Debug.DrawRay(origin, Vector2.right * direction * _stepRayDistance, Color.red);
+        Debug.DrawRay(new Vector2(origin.x, origin.y + stepHeight), Vector2.right * direction * _stepRayDistance, Color.green);
+    }
+
+    #endregion
 
     #region Duvar Tırmanma Fonksiyonları
 
@@ -357,6 +413,7 @@ public class PlayerController2D : MonoBehaviour
         _isWallBouncing = true;
         _wallBounceTimeLeft = wallBounceDuration;
         _lastWallBounceTime = Time.time;
+
         // Karakter duvara değiyorsa, bakış yönünün tersine doğru wall bounce yaparız
         float bounceDirection = transform.localScale.x * -1f;
         _rb.linearVelocity = new Vector2(bounceDirection * direction * wallBounceHorizontalForce, wallBounceVerticalForce);
@@ -453,7 +510,7 @@ public class PlayerController2D : MonoBehaviour
     #endregion
 
 
-    #region  Saldırı
+    #region Attack-Combo
 
     private void AttemptComboAttack()
     {
@@ -672,6 +729,7 @@ public class PlayerController2D : MonoBehaviour
     }
 
     #endregion
+
 
     #region  Gizmos Debug
     private void OnDrawGizmosSelected()

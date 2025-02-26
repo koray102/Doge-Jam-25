@@ -487,7 +487,7 @@ MonoBehaviour:
   attackDamage: 10
   wallCheck: {fileID: 4376214672124692758}
   wallCheckDistance: 0.12
-  wallSlideSpeed: 0.2
+  wallSlideSpeed: 0.1
   wallClimbSpeed: 0
   wallLayer:
     serializedVersion: 2
@@ -498,7 +498,7 @@ MonoBehaviour:
   dashKey: 101
   wallBounceKey: 32
   wallBounceHorizontalForce: 5
-  wallBounceVerticalForce: 5
+  wallBounceVerticalForce: 7
   wallBounceDuration: 0.2
   wallBounceCooldown: 0
   wallBounceFacingCooldown: 0.5

@@ -1065,11 +1065,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.19
+      value: 2.18
       objectReference: {fileID: 0}
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.28
+      value: 4.03
       objectReference: {fileID: 0}
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1101,6 +1101,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: stepHeight
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: attackCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: stepRayDistance
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6201495473430788751, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7031847350801322427, guid: a104956727813cf45ae06b070afcb37e, type: 3}
