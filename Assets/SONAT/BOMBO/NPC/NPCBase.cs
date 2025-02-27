@@ -8,7 +8,7 @@ public abstract class NPCBase : MonoBehaviour
     [Header("NPC Stats")]
     public float health = 100f;
     public float zeka = 0f; // Inspector üzerinden ayarlanabilir
-    public float xThickness = 1f;
+    public float xThickness;
     public bool startDirectionIsRight = true;
 
     [Header("Hareket Ayarları")]
@@ -62,6 +62,7 @@ public abstract class NPCBase : MonoBehaviour
     private Transform player;
     protected virtual void Start()
     {
+        xThickness = gameObject.transform.localScale.x;
         // Başlangıç yönü ayarı
         if (startDirectionIsRight)
             facingDirection = Vector2.right;

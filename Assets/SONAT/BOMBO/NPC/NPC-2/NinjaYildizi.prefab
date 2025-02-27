@@ -165,8 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 232224f1059ba044b943974f023f355f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: -360
-  lifetimeAfterImpact: 60
+  rotationSpeed: 0
+  lifetimeAfterImpact: 25
   shouldPauseOnProximity: 0
   pauseDistance: 5
   pauseDuration: 2

@@ -241,38 +241,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC-1
       objectReference: {fileID: 0}
-    - target: {fileID: 203146540716605023, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: zeka
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: OlumPatlamasi
-      value: 
-      objectReference: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackCooldown
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: startDirectionIsRight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: fakeAttackIntelligence
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: detectionLayerMask.m_Bits
-      value: 7344128
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: hologramRealizationChance
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -281,14 +249,6 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[1]'
       value: 
       objectReference: {fileID: 62902057}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: hologramDetectionIntelligence
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: hologramRealizationIntelligent
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 5493454380172680209, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.07
@@ -476,18 +436,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 137380037336293093, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 137380037336293093, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: m_Color.g
-      value: 0.86566347
-      objectReference: {fileID: 0}
-    - target: {fileID: 137380037336293093, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.28
@@ -527,18 +475,6 @@ PrefabInstance:
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: attacking
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: attackRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: enemyLayer.m_Bits
-      value: 2048
       objectReference: {fileID: 0}
     - target: {fileID: 7031847350801322427, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_Name
@@ -594,16 +530,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4516508102152981363, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
-      propertyPath: zeka
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
-      propertyPath: OlumPatlamasi
-      value: 
-      objectReference: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.29
@@ -870,75 +798,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1631712697
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.3706322
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -5.9579983
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257436501064956798, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4020625525890682907, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
-      propertyPath: m_Name
-      value: NinjaYildizi
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
 --- !u!1 &1677635236
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,4 +1221,3 @@ SceneRoots:
   - {fileID: 959520425}
   - {fileID: 984308020}
   - {fileID: 1605935639}
-  - {fileID: 1631712697}
