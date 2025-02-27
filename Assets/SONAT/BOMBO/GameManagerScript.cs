@@ -43,6 +43,14 @@ public class GameManagerScript : MonoBehaviour
         }
 
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {   
+        if (other.gameObject.CompareTag("Player"))
+        {
+            
+            SonrakiSeviye();
+        }
+    }
 
     public void SonrakiSeviye()
     {
@@ -57,7 +65,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void SeviyeTekrari()
     {
-        StartCoroutine(SmoothLerp(maxTransition, 0.2f));
+        StartCoroutine(SmoothLerp(maxTransition, 1f));
 
         Invoke("SeviyeTekrariGecis", 3f);
     }

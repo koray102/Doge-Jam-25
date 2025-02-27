@@ -150,13 +150,15 @@ public class PlayerController2D : MonoBehaviour
     public GameObject DashParticle;
     public GameObject ElektricParticle;
     private ZekaManager zekaManager;
-
+    private GameManagerScript gameManager;
+    private bool yarraYedin;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         zekaManager = FindFirstObjectByType<ZekaManager>();
+        gameManager = FindFirstObjectByType<GameManagerScript>();
     }
     
 
@@ -199,7 +201,7 @@ public class PlayerController2D : MonoBehaviour
 
         // Saldırı
         // Kombo saldırı denemesi
-        if (Input.GetKeyDown(KeyCode.F) && _attackTimer <= 0f)
+        if (Input.GetKeyDown(KeyCode.F) && _attackTimer <= 0f && !yarraYedin)
         {
             AttemptComboAttack();
         }
@@ -663,8 +665,16 @@ public class PlayerController2D : MonoBehaviour
                         if(isNPCAttacking && !isNPCFaking)
                         {
                             PerryAttack();
+                            enemyScript.GetComponent<NPC1Controller>().ParryYedi();
                             StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
-                        }else
+                        }else if (isNPCFaking)
+                        {
+                            ////////////////////////////////////////
+                            yarraYedin = true;
+                            Invoke("KendiniToparla", 3f);
+                            Debug.Log(yarraYedin);
+                        }
+                        else
                         {
                             enemyScript.TakeDamage(50f);
                             StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
@@ -683,7 +693,10 @@ public class PlayerController2D : MonoBehaviour
         }
     }
 
-
+    private void KendiniToparla()
+    {
+        yarraYedin = false;
+    }
     private void ResetAttack()
     {
         _isAttacking = false;
@@ -701,7 +714,7 @@ public class PlayerController2D : MonoBehaviour
         // Bir de bi partticle efekt koymak lazim
         Debug.Log("Perry");
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
-
+        
         zekaManager.FakeZekaArttır();
 
         CancelInvoke(nameof(ResetAttack));
@@ -756,6 +769,8 @@ public class PlayerController2D : MonoBehaviour
     {
         if(didDie)
             return;
+
+        gameManager.SeviyeTekrari();
 
         didDie = true;
         _rb.linearVelocity = Vector2.zero;

@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class NPCBase : MonoBehaviour
 {   
@@ -44,6 +45,7 @@ public abstract class NPCBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
 
+    
     protected enum NPCState { Patrol, Chase }
     protected NPCState state = NPCState.Patrol;
 
@@ -65,7 +67,8 @@ public abstract class NPCBase : MonoBehaviour
 
     private Transform player;
     protected virtual void Start()
-    {   
+    {
+        
 
         xThickness = gameObject.transform.localScale.x;
         // Başlangıç yönü ayarı
@@ -227,8 +230,8 @@ public abstract class NPCBase : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Vector2 originUpper = (Vector2)transform.position + Vector2.up * detectionRayOffset;
-        Vector2 originLower = (Vector2)transform.position - Vector2.up * detectionRayOffset;
+        Vector2 originUpper = (Vector2)rayPoint.position + Vector2.up * detectionRayOffset;
+        Vector2 originLower = (Vector2)rayPoint.position - Vector2.up * detectionRayOffset;
         Gizmos.DrawLine(originUpper, originUpper + facingDirection * detectionRange);
         Gizmos.DrawLine(originLower, originLower + facingDirection * detectionRange);
     }

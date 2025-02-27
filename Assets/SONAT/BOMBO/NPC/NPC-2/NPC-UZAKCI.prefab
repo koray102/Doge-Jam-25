@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 40
-  zeka: 0
+  zeka: 0.01
   startDirectionIsRight: 1
   patrolSpeed: 2
   chaseSpeed: 3
