@@ -320,6 +320,8 @@ MonoBehaviour:
   stepHeight: 0.1
   stepRayDistance: 0.1
   easyStepCollider: {fileID: 0}
+  coyoteTime: 0.5
+  jumpResetDelay: 0.2
   groundCheck: {fileID: 375056313060895766}
   groundCheckRadius: 0.07
   groundLayer:
@@ -633,7 +635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1716523647224331655, guid: 173e9e58fd56bca4f8b6faeb1c49fdb7, type: 3}
       propertyPath: EmissionModule.rateOverDistance.scalar
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3879464840024116995, guid: 173e9e58fd56bca4f8b6faeb1c49fdb7, type: 3}
       propertyPath: m_Name

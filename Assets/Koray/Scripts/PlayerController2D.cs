@@ -13,7 +13,14 @@ public class PlayerController2D : MonoBehaviour
     public float jumpForce = 5f;
     [SerializeField] private float stepHeight = 0.3f; // Karakterin atlayabileceği maksimum adım yüksekliği
     [SerializeField] private float stepRayDistance = 0.2f; // Engeli algılamak için yatay raycast mesafesi
-    [SerializeField] private GameObject easyStepCollider;
+    public float coyoteTime = 0.2f; // Platformdan düştükten sonra zıplama için izin verilen süre
+    private float coyoteTimeCounter; // Geri sayım sayacı
+    private bool hasJumped = false;
+    
+
+    [Header("Jump Reset Delay")]
+    public float jumpResetDelay = 0.2f;    // Zıpladıktan sonra hasJumped'i sıfırlamak için bekleme süresi
+    private float jumpResetTimer = 0f;
 
 
     [Header("Ground Check")]
@@ -143,6 +150,8 @@ public class PlayerController2D : MonoBehaviour
     public GameObject DashParticle;
     public GameObject ElektricParticle;
     private ZekaManager zekaManager;
+
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -173,9 +182,11 @@ public class PlayerController2D : MonoBehaviour
         // Zıplama
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (_isGrounded)
+            if ((!hasJumped) && (_isGrounded || coyoteTimeCounter > 0f))
             {
                 Jump();
+                hasJumped = true;
+                coyoteTimeCounter = 0f;
             }
         }
 
@@ -203,6 +214,20 @@ public class PlayerController2D : MonoBehaviour
                 inCombo = false;
                 lastAttackType = 0;
             }
+        }
+
+        if (_isGrounded)
+        {
+            if (jumpResetTimer <= 0f)
+            {
+                coyoteTimeCounter = coyoteTime;
+                hasJumped = false;  // Karakter yere tamamen iniş yaptıktan sonra zıplamaya yeniden izin ver.
+            }
+        }else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+            if (jumpResetTimer > 0f)
+                jumpResetTimer -= Time.deltaTime;
         }
 
         // Attack cooldown’u zamanla azalt
@@ -486,6 +511,10 @@ public class PlayerController2D : MonoBehaviour
 
         if (_anim)
             _anim.SetTrigger("JumpUp"); // Yukarı zıplama animasyonu
+
+        
+        jumpResetTimer = jumpResetDelay;  // Zıpladıktan sonra belirli süre boyunca resetlenmemesi için timer başlatılır.
+        hasJumped = true;
     }
 
 

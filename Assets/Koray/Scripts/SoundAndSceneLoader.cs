@@ -5,6 +5,7 @@ using System.Collections;
 public class SoundAndSceneLoader : MonoBehaviour
 {
     public AudioSource audioSource;   // Ses oynatacak AudioSource bileşeni
+    public AudioSource audioSourceLoop;   // Ses oynatacak AudioSource bileşeni
     public AudioClip soundToPlay;       // Çalınacak ses klibi
     public string sceneToLoad;          // Yüklenecek sahne adı
 
@@ -17,6 +18,7 @@ public class SoundAndSceneLoader : MonoBehaviour
     {
         if(audioSource != null && soundToPlay != null)
         {
+            audioSourceLoop.mute = true;
             // Ses klibini oynatıyoruz.
             audioSource.PlayOneShot(soundToPlay);
             
