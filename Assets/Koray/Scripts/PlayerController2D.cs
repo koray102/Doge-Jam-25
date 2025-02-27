@@ -586,6 +586,9 @@ public class PlayerController2D : MonoBehaviour
 
                 if (rb != null)
                 {
+                    CancelInvoke(nameof(ResetAttack));
+                    ResetAttack();
+                    
                     SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 1f);
 
                     // Karakterin facing yönünü al (örneğin, sağa bakıyorsa +1, sola -1)

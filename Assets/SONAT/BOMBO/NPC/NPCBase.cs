@@ -188,6 +188,12 @@ public abstract class NPCBase : MonoBehaviour
             animator.SetTrigger("Attack");
     }
 
+    protected void TriggerFakeAttackAnimation()
+    {
+        if (animator != null)
+            animator.SetTrigger("Fake Attack");
+    }
+
     // Hasar yeme fonksiyonu
     public virtual void TakeDamage(float damage)
     {
