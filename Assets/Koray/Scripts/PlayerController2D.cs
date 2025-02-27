@@ -139,7 +139,8 @@ public class PlayerController2D : MonoBehaviour
 
     public bool attacking;
 
-
+    [Header("Sonatın Eklemeler")]
+    public GameObject DashParticle;
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -148,8 +149,17 @@ public class PlayerController2D : MonoBehaviour
     
 
     void Update()
-    {
-        if(didDie)
+    {   
+        if(_isDashing && !DashParticle.activeInHierarchy)
+        {
+            DashParticle.SetActive(true);
+        }else if(_isDashing == false && DashParticle.activeInHierarchy)
+        {
+            DashParticle.SetActive(false);
+        }
+
+
+        if (didDie)
             return;
 
         // Yatay girdi (A/D veya Sol/Sağ ok tuşları)

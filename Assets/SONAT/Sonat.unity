@@ -241,38 +241,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC-1
       objectReference: {fileID: 0}
-    - target: {fileID: 203146540716605023, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: zeka
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: OlumPatlamasi
-      value: 
-      objectReference: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackCooldown
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: startDirectionIsRight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: fakeAttackIntelligence
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: detectionLayerMask.m_Bits
-      value: 7344128
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: hologramRealizationChance
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -281,14 +249,6 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[1]'
       value: 
       objectReference: {fileID: 62902057}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: hologramDetectionIntelligence
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: hologramRealizationIntelligent
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 5493454380172680209, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.07
@@ -476,18 +436,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 137380037336293093, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 137380037336293093, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: m_Color.g
-      value: 0.86566347
-      objectReference: {fileID: 0}
-    - target: {fileID: 137380037336293093, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.28
@@ -527,18 +475,6 @@ PrefabInstance:
     - target: {fileID: 3876862047252767447, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: attacking
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: attackRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: enemyLayer.m_Bits
-      value: 2048
       objectReference: {fileID: 0}
     - target: {fileID: 7031847350801322427, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_Name
@@ -596,17 +532,13 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8183877292847940923, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
-      propertyPath: OlumPatlamasi
-      value: 
-      objectReference: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.63
+      value: -8.29
       objectReference: {fileID: 0}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.54
+      value: -3.77
       objectReference: {fileID: 0}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.z

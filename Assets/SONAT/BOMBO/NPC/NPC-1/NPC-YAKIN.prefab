@@ -179,18 +179,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  zeka: 0
-  xThickness: 1
-  startDirectionIsRight: 1
-  patrolSpeed: 0
-  chaseSpeed: 0
+  zeka: 0.2
+  xThickness: 0.42
+  startDirectionIsRight: 0
+  patrolSpeed: 2
+  chaseSpeed: 3
   detectionRange: 10.8
   attackRange: 1.75
-  attackCooldown: 1
+  attackCooldown: 3
   detectionRayOffset: 0.26
   detectionLayerMask:
     serializedVersion: 2
-    m_Bits: 3149824
+    m_Bits: 7344128
   chaseMemoryTime: 5
   patrolPoints:
   - {fileID: 0}
@@ -201,12 +201,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1048576
   attackPoint: {fileID: 9066816224453161646}
-  OlumPatlamasi: {fileID: 0}
+  OlumPatlamasi: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
   fakeAttackIntelligence: 1
   fakeAttackDelay: 1
-  fakeAttackMultiplier: 0.5
-  maxFakeAttackChance: 0.5
-  hologramRealizationIntelligent: 0.7
+  fakeAttackMultiplier: 0.7
+  maxFakeAttackChance: 0.7
+  hologramRealizationIntelligent: 0.1
   hologramAttackRetryDelay: 0.3
   isAttacking: 0
   isFakeAttack: 0

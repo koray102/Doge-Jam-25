@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class NPC1Controller : NPCBase
 {
@@ -101,43 +102,85 @@ public class NPC1Controller : NPCBase
     // Tek birleşik Attack fonksiyonu: Hedef Player veya Hologram olabilir.
     protected override void Attack()
     {
-        Debug.Log("saldırı");
-
-
+        Debug.Log("Saldırı başlatıldı");
         isAttacking = true;
+
+        // 1. Zorla gerçek saldırı durumu
+        if (forceRealAttackNext)
+        {
+            ExecuteRealAttack();
+            forceRealAttackNext = false;
+            return;
+        }
+
+        // 2. Sahte saldırı olasılığını hesapla
+        float fakeAttackChance = Mathf.Clamp(fakeAttackIntelligence * fakeAttackMultiplier, 0f, maxFakeAttackChance);
+        if (Random.value < fakeAttackChance)
+        {
+            ExecuteFakeAttack();
+            return;
+        }
+
+        // 3. Normal gerçek saldırı
+        ExecuteRealAttack();
+    }
+
+    private void ExecuteRealAttack()
+    {
         TriggerAttackAnimation();
 
+        // Oyuncuya saldırı
         if (target.CompareTag("Player"))
         {
-            Debug.Log("NPC1: Player'a saldırı gerçekleştirildi!");
-            target.GetComponent<PlayerController2D>().Die();
-            StartCoroutine(ResetAttackFlags());
-        }
-        else if (target.CompareTag("Hologram"))
-        {
-            Debug.Log("NPC1: Holograma saldırı gerçekleştirildi!");
-            HologramScript hs = target.GetComponent<HologramScript>();
-            if (hs != null && !hs.isDetected)
+            // LayerMask için bit kayması kullanarak doğru maskeyi oluşturuyoruz
+            int playerLayerMask = 1 << LayerMask.NameToLayer("PLAYER");
+            if (Physics2D.OverlapCircle(new Vector2(attackPoint.position.x, attackPoint.position.y), attackRange, playerLayerMask))
             {
-                // Zeka oranına bağlı olarak hologramın sahte olduğunu fark etme şansı:
-                if (Random.value < hologramRealizationIntelligent )
-                {
-                    Debug.Log("NPC1: Hologramın sahte olduğu fark edildi. Bundan sonra saldırılmayacak.");
-                    hs.isDetected = true;
-                    StartCoroutine(ResetAttackFlags());
-                }
+                Debug.Log("NPC: Oyuncuya saldırı gerçekleştirildi!");
+                target.GetComponent<PlayerController2D>().Die();
             }
             else
             {
-                StartCoroutine(ResetAttackFlags());
+                Debug.Log("NPC: Oyuncuya saldırı denemesi başarısız oldu.");
             }
         }
-        else
+        // Holograma saldırı
+        else if (target.CompareTag("Hologram"))
         {
-            StartCoroutine(ResetAttackFlags());
+            int hologramLayerMask = 1 << LayerMask.NameToLayer("Flower");
+            if (Physics2D.OverlapCircle(new Vector2(attackPoint.position.x, attackPoint.position.y), attackRange, hologramLayerMask))
+            {
+                Debug.Log("NPC: Holograma saldırı gerçekleştirildi!");
+                HologramScript hs = target.GetComponent<HologramScript>();
+                if (hs != null && !hs.isDetected)
+                {
+                    // Zeka oranına bağlı olarak hologramın sahte olduğu fark edilebilir.
+                    if (Random.value < hologramRealizationIntelligent)
+                    {
+                        Debug.Log("NPC: Hologramın sahte olduğu fark edildi. Bundan sonra saldırı yapılmayacak.");
+                        hs.isDetected = true;
+                    }
+                }
+            }
         }
+
+        StartCoroutine(ResetAttackFlags());
     }
 
+    private void ExecuteFakeAttack()
+    {
+        isFakeAttack = true;
+        Debug.Log("NPC: Sahte saldırı gerçekleştiriliyor, bekleme süresi uygulanıyor...");
+        StartCoroutine(FakeAttackCoroutine());
+        StartCoroutine(ResetAttackFlags());
+    }
+
+    private IEnumerator FakeAttackCoroutine()
+    {
+        yield return new WaitForSeconds(fakeAttackDelay);
+        // Fake saldırı sonrası sonraki saldırı kesinlikle gerçek olacak.
+        forceRealAttackNext = true;
+    }
 
     private IEnumerator ResetAttackFlags()
     {
