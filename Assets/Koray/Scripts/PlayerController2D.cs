@@ -141,6 +141,7 @@ public class PlayerController2D : MonoBehaviour
 
     [Header("Sonatın Eklemeler")]
     public GameObject DashParticle;
+    public GameObject ElektricParticle;
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -603,6 +604,8 @@ public class PlayerController2D : MonoBehaviour
                     // x bileşeni kesinlikle karakterin tersine, y bileşeni hafif rastgele (örnek: -0.5 ile 0.5 arası)
                     Vector2 throwDirection = new Vector2(facing, Random.Range(-0.5f, 0.5f)).normalized;
                     rb.AddForce(throwDirection * bulletThrowForce, ForceMode2D.Impulse);
+
+                    Instantiate(ElektricParticle, rb.position, Quaternion.identity);
 
                     StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
                 }

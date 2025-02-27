@@ -38,6 +38,8 @@ public abstract class NPCBase : MonoBehaviour
     public LayerMask groundLayer;
     protected bool isGrounded;
 
+    public Transform rayPoint;
+
     protected Transform target;
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
@@ -129,8 +131,8 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Transform IsSomethingDetected()
     {
-        Vector2 originUpper = (Vector2)transform.position + Vector2.up * detectionRayOffset;
-        Vector2 originLower = (Vector2)transform.position - Vector2.up * detectionRayOffset;
+        Vector2 originUpper = (Vector2)rayPoint.position + Vector2.up * detectionRayOffset;
+        Vector2 originLower = (Vector2)rayPoint.position - Vector2.up * detectionRayOffset;
         RaycastHit2D hitUpper = Physics2D.Raycast(originUpper, facingDirection, detectionRange, detectionLayerMask);
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
 

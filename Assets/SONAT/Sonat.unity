@@ -241,6 +241,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC-1
       objectReference: {fileID: 0}
+    - target: {fileID: 203146540716605023, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
@@ -476,6 +480,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: ElektricParticle
+      value: 
+      objectReference: {fileID: 8479238177994466824, guid: 82dfc73306766a745874099c6035dd06, type: 3}
     - target: {fileID: 7031847350801322427, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_Name
       value: Character
@@ -527,10 +535,6 @@ PrefabInstance:
     - target: {fileID: 4516508102152981363, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_Name
       value: NPC-2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4516508102152981363, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8657537792849165120, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
       propertyPath: m_LocalPosition.x
