@@ -23,14 +23,22 @@ public class NPC1Controller : NPCBase
     // Saldırı bayraklarının aktif kalma süresi
     public float attackFlagDuration = 0.3f;
 
+    public float vurusGecikmesi = 1f;
+    
+    private bool attackIptal = false;
     protected override void Patrol()
     {
+        if (!isFakeAttack)
+        {
+            spriteRenderer.color = Color.white;
+        }
+
         if (patrolPoints.Length == 0)
             return;
 
         // Standart patrol hareketi:
         Transform targetPoint = patrolPoints[currentPatrolIndex];
-        if (Vector2.Distance(transform.position, targetPoint.position) > 2f)
+        if (Vector2.Distance(transform.position, targetPoint.position) > 1f)
         {
             facingDirection = (targetPoint.position.x - transform.position.x) >= 0 ? Vector2.right : Vector2.left;
             lastFacingDirection = facingDirection;
@@ -57,6 +65,10 @@ public class NPC1Controller : NPCBase
 
     protected override void ChaseAndAttack()
     {
+        if (!isFakeAttack)
+        {
+            spriteRenderer.color = Color.white;
+        }
         // Hedef seçimi: Base kodunuzdaki IsSomethingDetected() metodu hem Player hem de Hologram'ı yakalıyor.
         Transform detectedTarget = IsSomethingDetected();
         if (detectedTarget == null || !detectedTarget.gameObject.activeInHierarchy)
@@ -132,17 +144,7 @@ public class NPC1Controller : NPCBase
         // Oyuncuya saldırı
         if (target.CompareTag("Player"))
         {
-            // LayerMask için bit kayması kullanarak doğru maskeyi oluşturuyoruz
-            int playerLayerMask = 1 << LayerMask.NameToLayer("PLAYER");
-            if (Physics2D.OverlapCircle(new Vector2(attackPoint.position.x, attackPoint.position.y), attackRange, playerLayerMask))
-            {
-                Debug.Log("NPC: Oyuncuya saldırı gerçekleştirildi!");
-                target.GetComponent<PlayerController2D>().Die();
-            }
-            else
-            {
-                Debug.Log("NPC: Oyuncuya saldırı denemesi başarısız oldu.");
-            }
+            Invoke("HasarAlgilama", vurusGecikmesi);
         }
         // Holograma saldırı
         else if (target.CompareTag("Hologram"))
@@ -166,9 +168,26 @@ public class NPC1Controller : NPCBase
 
         StartCoroutine(ResetAttackFlags());
     }
+    public void HasarAlgilama()
+    {
+        // LayerMask için bit kayması kullanarak doğru maskeyi oluşturuyoruz
+        int playerLayerMask = 1 << LayerMask.NameToLayer("PLAYER");
+        if (Physics2D.OverlapCircle(new Vector2(attackPoint.position.x, attackPoint.position.y), attackRange, playerLayerMask) && !attackIptal)
+        {
+            Debug.Log("NPC: Oyuncuya saldırı gerçekleştirildi!");
+            if(target != null)
+            target.GetComponent<PlayerController2D>().Die();
+        }
+        else
+        {
+            attackIptal = false;
+            Debug.Log("NPC: Oyuncuya saldırı denemesi başarısız oldu.");
+        }
+    }
 
     private void ExecuteFakeAttack()
     {
+        spriteRenderer.color = Color.magenta;
         isFakeAttack = true;
         TriggerFakeAttackAnimation();
         Debug.Log("NPC: Sahte saldırı gerçekleştiriliyor, bekleme süresi uygulanıyor...");
@@ -191,8 +210,20 @@ public class NPC1Controller : NPCBase
         isFakeAttack = false;
     }
 
+    public void ParryYedi()
+    {
+        animator.SetTrigger("EndAttack");
+        attackIptal = true;
+
+        //Invoke("AttackIptalDuzelt", 1f);
+    }
     public override void GetDamage(float damage)
     {
         TakeDamage(damage);
+    }
+
+    private void AttackIptalDuzelt()
+    {
+        attackIptal = false;
     }
 }
