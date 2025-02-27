@@ -648,7 +648,7 @@ public class PlayerController2D : MonoBehaviour
                     ResetAttack();
                     _attackTimer = 0;
 
-                    zekaManager.projectilezekaarttır();
+                    zekaManager.Projectilezekaarttir();
 
                     SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 1f);
 
@@ -729,7 +729,7 @@ public class PlayerController2D : MonoBehaviour
         Debug.Log("Perry");
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
         
-        zekaManager.FakeZekaArttır();
+        zekaManager.FakeZekaArttir();
 
         CancelInvoke(nameof(ResetAttack));
         ResetAttack();

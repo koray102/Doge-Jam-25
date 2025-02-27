@@ -54,7 +54,7 @@ public class ZekaManager : MonoBehaviour
     }
 
     // Hologram zekasýný arttýran metot
-    public void hologramZekaArttýr()
+    public void HologramZekaArttir()
     {
         // Hologram zekasýnýn arttýrýlmasýna yönelik kod buraya gelecek
         npc1.hologramRealizationIntelligent += 0.04f;
@@ -62,7 +62,7 @@ public class ZekaManager : MonoBehaviour
     }
 
     // Fake zekasýný arttýran metot
-    public void FakeZekaArttýr()
+    public void FakeZekaArttir()
     {
         // Fake zekasýnýn arttýrýlmasýna yönelik kod buraya gelecek
         npc1.fakeAttackIntelligence += 0.04f;
@@ -70,7 +70,7 @@ public class ZekaManager : MonoBehaviour
     }
 
     // Projectile zekasýný arttýran metot
-    public void projectilezekaarttýr()
+    public void Projectilezekaarttir()
     {
         npc2.zeka += 0.03f;
         Guncelle();

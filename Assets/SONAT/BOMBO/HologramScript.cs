@@ -14,6 +14,6 @@ public class HologramScript : MonoBehaviour
     public void Detect()
     {
         isDetected = true;
-        zekaManager.hologramZekaArttýr();
+        zekaManager.HologramZekaArttir();
     }
 }
