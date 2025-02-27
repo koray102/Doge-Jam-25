@@ -41,14 +41,17 @@ public class NPC2Controller : NPCBase
 
     protected override void ChaseAndAttack()
     {
-        float deltaX = player.position.x - transform.position.x;
+        Transform target = IsSomethingDetected();
+
+
+        float deltaX = base.target.position.x - transform.position.x;
         float absDeltaX = Mathf.Abs(deltaX);
 
         facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
         lastFacingDirection = facingDirection;
 
         // Rastgele, düzensiz atış aralığı hesaplaması: her atış sonrası yeni rastgele değer oluşturulur.
-        float randomOffset = Random.Range(-firingIntervalVariation, firingIntervalVariation) * intelligence;
+        float randomOffset = Random.Range(-firingIntervalVariation, firingIntervalVariation) * zeka;
         float randomFiringInterval = Mathf.Clamp(baseFiringInterval + randomOffset, minFiringInterval, baseFiringInterval + firingIntervalVariation);
 
         if (absDeltaX <= attackRange)
@@ -67,14 +70,14 @@ public class NPC2Controller : NPCBase
         {
             // Chase zamanı bitse dahi, NPC2 her zaman oyuncunun x konumuna yaklaşmaya çalışır.
             Vector2 newPos = transform.position;
-            newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
+            newPos.x = Mathf.MoveTowards(transform.position.x, base.target.position.x, chaseSpeed * Time.deltaTime);
             transform.position = newPos;
             if (attackTimer > 0f)
                 attackTimer -= Time.deltaTime;
         }
     }
 
-    protected override void AttackPlayer()
+    protected override void Attack()
     {
         TriggerAttackAnimation();
     }
@@ -85,7 +88,7 @@ public class NPC2Controller : NPCBase
         if (projectileSpawnPoint != null)
         {
             // Zeka arttıkça fake projectile şansı lineer olarak %50'ye kadar artar.
-            float fakeChance = Mathf.Clamp(intelligence * 0.5f, 0f, 0.5f);
+            float fakeChance = Mathf.Clamp(zeka * 0.5f, 0f, 0.5f);
             GameObject projToShoot = projectilePrefab;
             if (Random.value < fakeChance && fakeProjectilePrefab != null)
             {

@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 2503850148692058522}
   - component: {fileID: 3629122583830164554}
   - component: {fileID: 4105998709136020953}
+  - component: {fileID: 8489746063191087991}
   m_Layer: 22
   m_Name: Flower
   m_TagString: Hologram
@@ -378,7 +379,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.42273, y: -3.3792288, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7341728186361057073}
@@ -519,3 +520,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyTime: 10
+--- !u!114 &8489746063191087991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6780768306653626045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5c4b51bee85c3489ce4527083058d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDetected: 0

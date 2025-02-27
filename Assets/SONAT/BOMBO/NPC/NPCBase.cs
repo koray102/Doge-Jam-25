@@ -7,7 +7,7 @@ public abstract class NPCBase : MonoBehaviour
 
     [Header("NPC Stats")]
     public float health = 100f;
-    public float intelligence = 0f; // Inspector üzerinden ayarlanabilir
+    public float zeka = 0f; // Inspector üzerinden ayarlanabilir
     public float xThickness = 1f;
     public bool startDirectionIsRight = true;
 
@@ -38,7 +38,7 @@ public abstract class NPCBase : MonoBehaviour
     public LayerMask groundLayer;
     protected bool isGrounded;
 
-    protected Transform player;
+    protected Transform target;
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
 
@@ -49,13 +49,17 @@ public abstract class NPCBase : MonoBehaviour
     protected Vector2 lastFacingDirection = Vector2.right;
     // Oyun başlamadan bakacağı yönü belirleyebilmek için:
     
+    
 
     protected Animator animator;
 
     public Transform attackPoint;
 
+    public ParticleSystem OlumPatlamasi;
+
     private GameManagerScript gameManagerScript;
 
+    private Transform player;
     protected virtual void Start()
     {
         // Başlangıç yönü ayarı
@@ -92,6 +96,7 @@ public abstract class NPCBase : MonoBehaviour
         if (groundCheck != null)
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
+        
         switch (state)
         {
             case NPCState.Patrol:
@@ -101,11 +106,12 @@ public abstract class NPCBase : MonoBehaviour
                     animator.SetBool("IsChasing", false);
                 }
                 Patrol();
-                if (IsPlayerDetected())
+                target = IsSomethingDetected();
+                if (target != null)
                 {
                     state = NPCState.Chase;
                     chaseTimer = chaseMemoryTime;
-                    chaseDirectionSign = (player.position.x - transform.position.x) >= 0 ? 1 : -1;
+                    chaseDirectionSign = (target.position.x - transform.position.x) >= 0 ? 1 : -1;
                 }
                 break;
             case NPCState.Chase:
@@ -120,18 +126,49 @@ public abstract class NPCBase : MonoBehaviour
         UpdateSpriteFlip();
     }
 
-    protected bool IsPlayerDetected()
+    protected Transform IsSomethingDetected()
     {
         Vector2 originUpper = (Vector2)transform.position + Vector2.up * detectionRayOffset;
         Vector2 originLower = (Vector2)transform.position - Vector2.up * detectionRayOffset;
         RaycastHit2D hitUpper = Physics2D.Raycast(originUpper, facingDirection, detectionRange, detectionLayerMask);
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
 
-        return ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player")) ||
-                (hitLower.collider != null && hitLower.collider.CompareTag("Player")));
+        if ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player")) ||
+                (hitLower.collider != null && hitLower.collider.CompareTag("Player")))
+        {
+            return player.transform;
+        }
+        else if (hitUpper.collider != null && hitUpper.collider.CompareTag("Hologram"))
+        {
+            HologramScript hs = hitUpper.transform.GetComponent<HologramScript>();
+            if (!hs.isDetected)
+            {
+                return hitUpper.transform;
+            }
+                
+        }
+        else if(hitLower.collider != null && hitLower.collider.CompareTag("Hologram"))
+        {
+            HologramScript hs = hitLower.transform.GetComponent<HologramScript>();
+            if (!hs.isDetected)
+            {
+                return hitLower.transform;
+            }
+        }
+        else
+        {
+            return null;
+        }
+
+
+        return null;
+            
     }
 
+    // Yeni eklenen hologram algılama metodu:
     
+
+
 
     protected void UpdateSpriteFlip()
     {
@@ -163,6 +200,8 @@ public abstract class NPCBase : MonoBehaviour
     {
         if (gameManagerScript != null)
             gameManagerScript.OlumOldu();
+
+        Instantiate(OlumPatlamasi, gameObject.transform.position, quaternion.identity);
         Destroy(gameObject);
     }
 
@@ -170,7 +209,7 @@ public abstract class NPCBase : MonoBehaviour
     protected abstract void Patrol();
     protected abstract void OzelBaslangic();
     protected abstract void ChaseAndAttack();
-    protected abstract void AttackPlayer();
+    protected abstract void Attack();
     public abstract void GetDamage(float damage); // Parametre alan şekilde güncellendi
 
     void OnDrawGizmosSelected()
