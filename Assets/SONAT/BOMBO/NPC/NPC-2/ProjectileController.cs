@@ -21,7 +21,7 @@ public class ProjectileController : MonoBehaviour
 
     private PlayerController2D playerOBJ;
 
-    protected bool geriSekti = false;
+
 
     void Start()
     {
@@ -36,10 +36,7 @@ public class ProjectileController : MonoBehaviour
         }
     }
 
-    public void GeriSekti()
-    {
-        geriSekti = true;
-    }
+
     void Update()
     {
         // Çarpışma gerçekleşmediyse dönüş devam eder.
