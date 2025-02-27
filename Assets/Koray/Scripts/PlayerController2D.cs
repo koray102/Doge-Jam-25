@@ -145,6 +145,7 @@ public class PlayerController2D : MonoBehaviour
     private ZekaManager zekaManager;
     private GameManagerScript gameManager;
     private bool yarraYedin;
+    private SpriteRenderer sr;
 
     void Awake()
     {
@@ -152,15 +153,28 @@ public class PlayerController2D : MonoBehaviour
         _anim = GetComponent<Animator>();
         zekaManager = FindFirstObjectByType<ZekaManager>();
         gameManager = FindFirstObjectByType<GameManagerScript>();
+         sr = GetComponent<SpriteRenderer>();
     }
     
 
     void Update()
-    {   
-        if(_isDashing && !DashParticle.activeInHierarchy)
+    {
+
+        if (yarraYedin)
+        {
+            sr.color = Color.red;
+        }
+        else
+        {
+            sr.color = Color.white;
+        }
+
+
+        if (_isDashing && !DashParticle.activeInHierarchy)
         {
             DashParticle.SetActive(true);
-        }else if(_isDashing == false && DashParticle.activeInHierarchy)
+        }
+        else if (_isDashing == false && DashParticle.activeInHierarchy)
         {
             DashParticle.SetActive(false);
         }
@@ -291,7 +305,7 @@ public class PlayerController2D : MonoBehaviour
         // Duvar kontrolü
         CheckWall();
 
-        if(_isDashing)
+        if(_isDashing || !_isGrounded)
         {
             HandleStep(stepRayDistance * 2);
         }
