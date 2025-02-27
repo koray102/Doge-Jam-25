@@ -2199,8 +2199,8 @@ Transform:
   m_GameObject: {fileID: 495654130}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.367, y: -6.72, z: 0}
-  m_LocalScale: {x: 100.032104, y: 3.8268595, z: 1}
+  m_LocalPosition: {x: 31.095, y: -6.72, z: 0}
+  m_LocalScale: {x: 103.483215, y: 3.8268595, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 154679657}
@@ -5371,6 +5371,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: stepHeight
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: ElektricParticle
       value: 
       objectReference: {fileID: 8479238177994466824, guid: 82dfc73306766a745874099c6035dd06, type: 3}
@@ -6181,8 +6185,8 @@ Transform:
   m_GameObject: {fileID: 1658701265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.76, y: -5.3119, z: 0}
-  m_LocalScale: {x: 1, y: 3.8081603, z: 1}
+  m_LocalPosition: {x: -5.76, y: -5.3976, z: 0}
+  m_LocalScale: {x: 1, y: 3.6367931, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 154679657}
