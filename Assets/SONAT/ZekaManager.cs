@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ZekaManager : MonoBehaviour
 {
-    // Public prefab referanslarý; Unity Editor üzerinden atanabilir
+    // Public prefab referanslarï¿½; Unity Editor ï¿½zerinden atanabilir
     public GameObject prefab1;
     public GameObject prefab2;
 
@@ -22,11 +22,11 @@ public class ZekaManager : MonoBehaviour
         int npcLayer = LayerMask.NameToLayer("NPC");
         if (npcLayer == -1)
         {
-            Debug.LogError("NPC layer bulunamadý. Lütfen 'NPC' adýnda bir layer oluþturun.");
+            Debug.LogError("NPC layer bulunamadï¿½. Lï¿½tfen 'NPC' adï¿½nda bir layer oluï¿½turun.");
             return;
         }
 
-        // Sahnedeki root objeleri alýp, recursive olarak NPC layer'ýndaki objeleri topluyoruz
+        // Sahnedeki root objeleri alï¿½p, recursive olarak NPC layer'ï¿½ndaki objeleri topluyoruz
         GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
         foreach (GameObject root in rootObjects)
         {
@@ -49,28 +49,28 @@ public class ZekaManager : MonoBehaviour
 
     void Update()
     {
-        // Eðer oyun esnasýnda bir NPC yok olduysa (destroy edildiyse), listenin referansýný temizle
+        // Eï¿½er oyun esnasï¿½nda bir NPC yok olduysa (destroy edildiyse), listenin referansï¿½nï¿½ temizle
         npcObjects.RemoveAll(npc => npc == null);
     }
 
-    // Hologram zekasýný arttýran metot
-    public void hologramZekaArttýr()
+    // Hologram zekasï¿½nï¿½ arttï¿½ran metot
+    public void HologramZekaArttir()
     {
-        // Hologram zekasýnýn arttýrýlmasýna yönelik kod buraya gelecek
+        // Hologram zekasï¿½nï¿½n arttï¿½rï¿½lmasï¿½na yï¿½nelik kod buraya gelecek
         npc1.hologramRealizationIntelligent += 0.04f;
         Guncelle();
     }
 
-    // Fake zekasýný arttýran metot
-    public void FakeZekaArttýr()
+    // Fake zekasï¿½nï¿½ arttï¿½ran metot
+    public void FakeZekaArttir()
     {
-        // Fake zekasýnýn arttýrýlmasýna yönelik kod buraya gelecek
+        // Fake zekasï¿½nï¿½n arttï¿½rï¿½lmasï¿½na yï¿½nelik kod buraya gelecek
         npc1.fakeAttackIntelligence += 0.04f;
         Guncelle();
     }
 
-    // Projectile zekasýný arttýran metot
-    public void projectilezekaarttýr()
+    // Projectile zekasï¿½nï¿½ arttï¿½ran metot
+    public void Projectilezekaarttir()
     {
         npc2.zeka += 0.03f;
         Guncelle();
