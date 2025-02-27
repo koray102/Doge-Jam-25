@@ -170,6 +170,7 @@ public class NPC1Controller : NPCBase
     private void ExecuteFakeAttack()
     {
         isFakeAttack = true;
+
         Debug.Log("NPC: Sahte saldırı gerçekleştiriliyor, bekleme süresi uygulanıyor...");
         StartCoroutine(FakeAttackCoroutine());
         StartCoroutine(ResetAttackFlags());
@@ -177,6 +178,7 @@ public class NPC1Controller : NPCBase
 
     private IEnumerator FakeAttackCoroutine()
     {
+        TriggerFakeAttackAnimation();
         yield return new WaitForSeconds(fakeAttackDelay);
         // Fake saldırı sonrası sonraki saldırı kesinlikle gerçek olacak.
         forceRealAttackNext = true;

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 506e0198a79966b4794620771886884a
+guid: b44bbbc3573058e4ead0d05571a6d18d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3396536884829556171
-    second: "MERM\u013022_0"
+      213: 5689683799688995365
+    second: "C\u0327ic\u0327ek_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "MERM\u013022_0"
+      name: "C\u0327ic\u0327ek_0"
       rect:
         serializedVersion: 2
-        x: 0
+        x: 145
         y: 0
-        width: 522
-        height: 101
+        width: 746
+        height: 674
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bcd07c61d4ce22f20800000000000000
-      internalID: 3396536884829556171
+      spriteID: 522e1c44541d5fe40800000000000000
+      internalID: 5689683799688995365
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "MERM\u013022_0": 3396536884829556171
+      "C\u0327ic\u0327ek_0": 5689683799688995365
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
