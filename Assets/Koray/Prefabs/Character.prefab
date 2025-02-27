@@ -182,7 +182,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3c65fbe3bf99f984db8f53777461a3e7, type: 3}
-  m_Color: {r: 1, g: 0.86566347, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -372,6 +372,7 @@ MonoBehaviour:
   killCamShakeDuration: 0
   attacking: 0
   DashParticle: {fileID: 3964676188289405538}
+  ElektricParticle: {fileID: 0}
 --- !u!95 &738059417067656967
 Animator:
   serializedVersion: 7

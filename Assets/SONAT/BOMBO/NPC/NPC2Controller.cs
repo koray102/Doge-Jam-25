@@ -20,9 +20,7 @@ public class NPC2Controller : NPCBase
 
     protected override void OzelBaslangic()
     {
-        TriggerAttackAnimation();
-        if (projectilePrefab != null && projectileSpawnPoint != null)
-            ShootProjectile();
+
     }
 
     protected override void Patrol()

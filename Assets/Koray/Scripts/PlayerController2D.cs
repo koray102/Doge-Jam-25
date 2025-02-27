@@ -141,10 +141,13 @@ public class PlayerController2D : MonoBehaviour
 
     [Header("Sonatın Eklemeler")]
     public GameObject DashParticle;
+    public GameObject ElektricParticle;
+    private ZekaManager zekaManager;
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+        zekaManager = FindFirstObjectByType<ZekaManager>();
     }
     
 
@@ -598,7 +601,10 @@ public class PlayerController2D : MonoBehaviour
                 {
                     CancelInvoke(nameof(ResetAttack));
                     ResetAttack();
-                    
+                    _attackTimer = 0;
+
+                    zekaManager.projectilezekaarttır();
+
                     SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 1f);
 
                     // Karakterin facing yönünü al (örneğin, sağa bakıyorsa +1, sola -1)
@@ -606,6 +612,8 @@ public class PlayerController2D : MonoBehaviour
                     // x bileşeni kesinlikle karakterin tersine, y bileşeni hafif rastgele (örnek: -0.5 ile 0.5 arası)
                     Vector2 throwDirection = new Vector2(facing, Random.Range(-0.5f, 0.5f)).normalized;
                     rb.AddForce(throwDirection * bulletThrowForce, ForceMode2D.Impulse);
+
+                    Instantiate(ElektricParticle, rb.position, Quaternion.identity);
 
                     StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
                 }
@@ -650,6 +658,8 @@ public class PlayerController2D : MonoBehaviour
     private void ResetAttack()
     {
         _isAttacking = false;
+
+        _attackTimer = 0;
     }
 
     #endregion
@@ -662,6 +672,8 @@ public class PlayerController2D : MonoBehaviour
         // Bir de bi partticle efekt koymak lazim
         Debug.Log("Perry");
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
+
+        zekaManager.FakeZekaArttır();
 
         CancelInvoke(nameof(ResetAttack));
         ResetAttack();

@@ -21,6 +21,8 @@ public class ProjectileController : MonoBehaviour
 
     private PlayerController2D playerOBJ;
 
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -33,6 +35,7 @@ public class ProjectileController : MonoBehaviour
             playerTransform = playerObj.transform;
         }
     }
+
 
     void Update()
     {
@@ -73,6 +76,10 @@ public class ProjectileController : MonoBehaviour
         {
             playerOBJ.Die();
             Destroy(gameObject);
+        }else if(collision.transform.gameObject.CompareTag("NPC-1") || collision.transform.gameObject.CompareTag("NPC-2") )
+        {
+            NPCBase npcCODE = collision.transform.GetComponent<NPCBase>();
+            npcCODE.TakeDamage(40f);
         }
         if (!hasImpacted)
         {
@@ -86,6 +93,6 @@ public class ProjectileController : MonoBehaviour
                 col.enabled = false;
             // Belirtilen süre sonra yok ol
             Destroy(gameObject, lifetimeAfterImpact);
-        }
+        } 
     }
 }

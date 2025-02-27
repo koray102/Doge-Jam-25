@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 0
-  lifetimeAfterImpact: 25
+  lifetimeAfterImpact: 0
   shouldPauseOnProximity: 1
   pauseDistance: 2
   pauseDuration: 0.2

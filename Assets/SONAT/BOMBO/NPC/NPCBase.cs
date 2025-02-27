@@ -8,7 +8,7 @@ public abstract class NPCBase : MonoBehaviour
     [Header("NPC Stats")]
     public float health = 100f;
     public float zeka = 0f; // Inspector üzerinden ayarlanabilir
-    public float xThickness;
+    private float xThickness;
     public bool startDirectionIsRight = true;
 
     [Header("Hareket Ayarları")]
@@ -38,6 +38,8 @@ public abstract class NPCBase : MonoBehaviour
     public LayerMask groundLayer;
     protected bool isGrounded;
 
+    public Transform rayPoint;
+
     protected Transform target;
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
@@ -47,9 +49,11 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
+
+    
     // Oyun başlamadan bakacağı yönü belirleyebilmek için:
-    
-    
+
+
 
     protected Animator animator;
 
@@ -61,7 +65,8 @@ public abstract class NPCBase : MonoBehaviour
 
     private Transform player;
     protected virtual void Start()
-    {
+    {   
+
         xThickness = gameObject.transform.localScale.x;
         // Başlangıç yönü ayarı
         if (startDirectionIsRight)
@@ -129,8 +134,8 @@ public abstract class NPCBase : MonoBehaviour
 
     protected Transform IsSomethingDetected()
     {
-        Vector2 originUpper = (Vector2)transform.position + Vector2.up * detectionRayOffset;
-        Vector2 originLower = (Vector2)transform.position - Vector2.up * detectionRayOffset;
+        Vector2 originUpper = (Vector2)rayPoint.position + Vector2.up * detectionRayOffset;
+        Vector2 originLower = (Vector2)rayPoint.position - Vector2.up * detectionRayOffset;
         RaycastHit2D hitUpper = Physics2D.Raycast(originUpper, facingDirection, detectionRange, detectionLayerMask);
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
 

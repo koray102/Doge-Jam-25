@@ -5020,6 +5020,7 @@ GameObject:
   m_Component:
   - component: {fileID: 494180317764053070}
   - component: {fileID: 8522610023218785316}
+  - component: {fileID: 3446306284420917563}
   m_Layer: 0
   m_Name: GAMEMANAGER
   m_TagString: GameManager
@@ -5060,6 +5061,20 @@ MonoBehaviour:
   afterSceneName: Sonat
   TransitionMat: {fileID: 2100000, guid: c4fccb8d1262b6647a336e4c15f5203f, type: 2}
   duman: {fileID: 8972070917333122774}
+--- !u!114 &3446306284420917563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6609970989472451777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4775603a9e91de540b9701cd51c8726b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab1: {fileID: 203146540716605023, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+  prefab2: {fileID: 4516508102152981363, guid: e73725c2a0f61944988a074ab42c686a, type: 3}
 --- !u!1001 &467048523020141792
 PrefabInstance:
   m_ObjectHideFlags: 0
