@@ -3,17 +3,23 @@ using System.Collections;
 
 public class NPC1Controller : NPCBase
 {
-    // Fake attack ayarları: zeka arttıkça fake saldırı olasılığı lineer artıyor (maksimum belirli bir değere kadar)
+    [Header("Fake Attack Ayarları")]
+    public float fakeAttackIntelligence = 1f;
     public float fakeAttackDelay = 1.0f;
-    public float fakeAttackMultiplier = 0.5f;  // Örneğin, intelligence 1 ise maksimum %50
+    public float fakeAttackMultiplier = 0.5f;  // Örneğin, fakeAttackIntelligence 1 ise maksimum %50
     public float maxFakeAttackChance = 0.5f;     // Maksimum fake saldırı olasılığı
     private bool forceRealAttackNext = false;    // Fake saldırı gerçekleşirse, sonraki saldırı gerçek olmak zorunda
 
-    // Saldırı anı algılanması için bayraklar:
+    [Header("Hologram Tespit Ayarları")]
+    // NPC'nin hologramı fark etme (sahte olduğunu anlama) şansı (0-1 arası)
+    public float hologramRealizationIntelligent = 0.7f;
+    // Eğer fark edilemezse saldırıyı tekrarlama gecikmesi
+    public float hologramAttackRetryDelay = 0.3f;
+
+    [Header("Saldırı Bayrakları")]
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isFakeAttack = false;
-
-    // Saldırı bayraklarının ne kadar süre true kalacağını ayarlamak için public parametre:
+    // Saldırı bayraklarının aktif kalma süresi
     public float attackFlagDuration = 0.3f;
 
     protected override void Patrol()
@@ -21,6 +27,7 @@ public class NPC1Controller : NPCBase
         if (patrolPoints.Length == 0)
             return;
 
+        // Standart patrol hareketi:
         Transform targetPoint = patrolPoints[currentPatrolIndex];
         if (Vector2.Distance(transform.position, targetPoint.position) > 2f)
         {
@@ -33,79 +40,55 @@ public class NPC1Controller : NPCBase
             facingDirection = lastFacingDirection;
             currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
         }
+
+        // Patrol modunda, eğer oyuncu veya (raycast ile gerçek şekilde tespit edilmiş) hologram varsa chase moduna geç.
+        if (IsSomethingDetected() != null)
+        {
+            state = NPCState.Chase;
+            chaseTimer = chaseMemoryTime;
+        }
     }
 
     protected override void OzelBaslangic()
     {
-        // NPC1 için ek başlangıç işlemleri (varsa)
+        // NPC1 için özel başlangıç işlemleri (varsa)
     }
 
     protected override void ChaseAndAttack()
     {
-        float deltaX = player.position.x - transform.position.x;
-        bool playerDetected = IsPlayerDetected();
-
-        // Eğer oyuncu algılanmıyorsa, hologram araması yapılacak:
-        if (!playerDetected)
+        // Hedef seçimi: Base kodunuzdaki IsSomethingDetected() metodu hem Player hem de Hologram'ı yakalıyor.
+        Transform detectedTarget = IsSomethingDetected();
+        if (detectedTarget == null || !detectedTarget.gameObject.activeInHierarchy)
         {
-            GameObject hologram = GameObject.FindGameObjectWithTag("Hologram");
-            if (hologram != null)
-            {
-                // Hologramın bağlı olduğu script’in isDetected değeri kontrol ediliyor.
-                HologramScript holoScript = hologram.GetComponent<HologramScript>();
-                if (holoScript != null && !holoScript.isDetected)
-                {
-                    // Zeka arttıkça hologramı fark etme olasılığı artar.
-                    float detectionProbability = Mathf.Clamp01(intelligence);
-                    if (Random.value < detectionProbability)
-                    {
-                        // Hologram algılandı: NPC sanki oyuncuyu görmüş gibi chase moduna girip holograma saldırır.
-                        chaseTimer = chaseMemoryTime;
-                        facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
-                        lastFacingDirection = facingDirection;
-                        AttackHologram(hologram.transform);
-                        holoScript.isDetected = true;
-                        return;
-                    }
-                }
-            }
-            // Oyuncu algılanmıyorsa, chase süresi bitene kadar oyuncunun x koordinatına doğru ilerlemeye devam et.
-            if (chaseTimer > 0f)
-            {
-                facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
-                lastFacingDirection = facingDirection;
-                Vector2 newPos = transform.position;
-                newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
-                transform.position = newPos;
-                chaseTimer -= Time.deltaTime;
-                return;
-            }
-            else
-            {
-                state = NPCState.Patrol;
-                return;
-            }
+            state = NPCState.Patrol;
+            return;
         }
-        else
+        // Eğer hedef hologram ise fakat saldırı sırasında oyuncu görünürse, hedef oyuncuya çevrilir.
+        
+        if (detectedTarget.CompareTag("Hologram") && IsSomethingDetected())
         {
-            // Oyuncu normal algılandığında chase süresi resetlenir.
-            chaseTimer = chaseMemoryTime;
-            facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
-            lastFacingDirection = facingDirection;
+            detectedTarget = target;  // base.target Player objesidir.
         }
 
-        // Eğer oyuncu attackRange'e yakınsa, daha fazla yaklaşmaya gerek yok; sadece saldır.
+        // Hareket yalnızca x ekseninde uygulanır:
+        float deltaX = detectedTarget.position.x - transform.position.x;
+        chaseTimer = chaseMemoryTime;
+        facingDirection = (deltaX >= 0) ? Vector2.right : Vector2.left;
+        lastFacingDirection = facingDirection;
+
         if (Mathf.Abs(deltaX) > attackRange)
         {
             Vector2 newPos = transform.position;
-            newPos.x = Mathf.MoveTowards(transform.position.x, player.position.x, chaseSpeed * Time.deltaTime);
+            newPos.x = Mathf.MoveTowards(transform.position.x, detectedTarget.position.x, chaseSpeed * Time.deltaTime);
             transform.position = newPos;
         }
         else
         {
             if (attackTimer <= 0f)
             {
-                AttackPlayer();
+                // Tek birleşik Attack fonksiyonu çağrılır:
+                target = detectedTarget;
+                Attack();
                 attackTimer = attackCooldown;
             }
             else
@@ -115,65 +98,52 @@ public class NPC1Controller : NPCBase
         }
     }
 
-    protected override void AttackPlayer()
+    // Tek birleşik Attack fonksiyonu: Hedef Player veya Hologram olabilir.
+    protected override void Attack()
     {
-        // Saldırı anını algılamak için bayrak set ediliyor:
-        isAttacking = true;
+        Debug.Log("saldırı");
 
-        if (forceRealAttackNext)
+
+        isAttacking = true;
+        TriggerAttackAnimation();
+
+        if (target.CompareTag("Player"))
         {
-            TriggerAttackAnimation();
-            Debug.Log("NPC1: Gerçek saldırı (Player) gerçekleştirildi!");
-            player.gameObject.GetComponent<PlayerController2D>().Die();
-            
-            forceRealAttackNext = false;
-            isFakeAttack = false;
+            Debug.Log("NPC1: Player'a saldırı gerçekleştirildi!");
+            target.GetComponent<PlayerController2D>().Die();
             StartCoroutine(ResetAttackFlags());
         }
-        else
+        else if (target.CompareTag("Hologram"))
         {
-            // Zekaya bağlı fake saldırı olasılığını hesapla (maksimum %50)
-            float computedFakeChance = Mathf.Clamp(intelligence * fakeAttackMultiplier, 0f, maxFakeAttackChance);
-            if (Random.value < computedFakeChance)
+            Debug.Log("NPC1: Holograma saldırı gerçekleştirildi!");
+            HologramScript hs = target.GetComponent<HologramScript>();
+            if (hs != null && !hs.isDetected)
             {
-                isFakeAttack = true;
-                Debug.Log("NPC1: Fake saldırı gerçekleştiriliyor, bekleme süresi uygulanıyor...");
-                StartCoroutine(FakeAttackCoroutine());
-                StartCoroutine(ResetAttackFlags());
-                return;
+                // Zeka oranına bağlı olarak hologramın sahte olduğunu fark etme şansı:
+                if (Random.value < hologramRealizationIntelligent )
+                {
+                    Debug.Log("NPC1: Hologramın sahte olduğu fark edildi. Bundan sonra saldırılmayacak.");
+                    hs.isDetected = true;
+                    StartCoroutine(ResetAttackFlags());
+                }
             }
             else
             {
-                TriggerAttackAnimation();
-                Debug.Log("NPC1: Gerçek saldırı (Player) gerçekleştirildi!");
-                isFakeAttack = false;
                 StartCoroutine(ResetAttackFlags());
             }
         }
-        // Gerçek saldırıda oyuncuya hasar verme kodlarını buraya ekleyebilirsin.
+        else
+        {
+            StartCoroutine(ResetAttackFlags());
+        }
     }
 
-    private IEnumerator FakeAttackCoroutine()
-    {
-        yield return new WaitForSeconds(fakeAttackDelay);
-        // Fake saldırı sonrası sonraki saldırı kesinlikle gerçek olacak.
-        forceRealAttackNext = true;
-    }
 
-    // Saldırı bayraklarını attackFlagDuration kadar süre sonra resetler.
     private IEnumerator ResetAttackFlags()
     {
         yield return new WaitForSeconds(attackFlagDuration);
         isAttacking = false;
         isFakeAttack = false;
-    }
-
-    // Holograma saldırı metodu: hedef olarak verilen hologram üzerine saldırı yapar.
-    private void AttackHologram(Transform hologram)
-    {
-        TriggerAttackAnimation();
-        Debug.Log("NPC1: Holograma saldırı gerçekleştirildi!");
-        // Holograma hasar verme veya imha etme işlemleri eklenebilir.
     }
 
     public override void GetDamage(float damage)

@@ -19,6 +19,8 @@ public class ProjectileController : MonoBehaviour
     private Vector2 storedVelocity;
     private Transform playerTransform;
 
+    private PlayerController2D playerOBJ;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,6 +29,7 @@ public class ProjectileController : MonoBehaviour
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
+            playerOBJ = playerObj.GetComponent<PlayerController2D>();
             playerTransform = playerObj.transform;
         }
     }
@@ -68,8 +71,8 @@ public class ProjectileController : MonoBehaviour
     {
         if (collision.transform.gameObject.CompareTag("Player"))
         {
+            playerOBJ.Die();
             Destroy(gameObject);
-            //player.Die();
         }
         if (!hasImpacted)
         {

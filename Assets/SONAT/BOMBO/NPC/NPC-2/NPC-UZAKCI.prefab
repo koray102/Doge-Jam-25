@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  intelligence: 60
+  zeka: 0.1
   xThickness: 0.42
   startDirectionIsRight: 1
   patrolSpeed: 2
