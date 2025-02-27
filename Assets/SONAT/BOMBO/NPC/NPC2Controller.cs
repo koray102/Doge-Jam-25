@@ -100,7 +100,7 @@ public class NPC2Controller : NPCBase
                 Debug.Log("NPC2: Gerçek projectile fırlatılıyor.");
             }
 
-            GameObject proj = Instantiate(projToShoot, projectileSpawnPoint.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+            GameObject proj = Instantiate(projToShoot, projectileSpawnPoint.position, Quaternion.identity);
             Rigidbody2D projRb = proj.GetComponent<Rigidbody2D>();
             if (projRb != null)
                 projRb.linearVelocity = facingDirection * projectileSpeed;
