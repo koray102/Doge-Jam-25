@@ -166,25 +166,12 @@ public class PlayerController2D : MonoBehaviour
             }
         }
 
-        /*if(_isGrounded)
-        {
-            easyStepCollider.SetActive(true);
-        }else
-        {
-            easyStepCollider.SetActive(false);
-        }*/
-
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             Die();
         }
-
-
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            ActivateSlowTime();
-        }
+        
 
         // Saldırı
         // Kombo saldırı denemesi
@@ -293,7 +280,7 @@ public class PlayerController2D : MonoBehaviour
         }
 
         // Eğer dash, wall bounce veya saldırı durumunda normal hareket iptal edilsin
-        if (_isDashing || _isWallBouncing || _isAttacking)
+        if (_isDashing || _isWallBouncing)
             return;
 
         // Duvardaysak duvar slide hareketi
@@ -321,7 +308,7 @@ public class PlayerController2D : MonoBehaviour
             Flip();
         }
 
-        // Yürüyüş sesi için kontrol
+        /* Yürüyüş sesi için kontrol
         if (walkSound != null && _isGrounded && Mathf.Abs(_horizontalInput) > 0.1f && !_isAttacking && !_isDashing)
         {
             if (!walkSound.isPlaying || walkSound.clip != walkSoundClip)
@@ -337,7 +324,7 @@ public class PlayerController2D : MonoBehaviour
                 walkSound.Stop();
                 walkSound.loop = false;
             }
-        }
+        }*/
     }
 
 
@@ -380,6 +367,7 @@ public class PlayerController2D : MonoBehaviour
     }
 
     #endregion
+
 
     #region Duvar Tırmanma Fonksiyonları
 
@@ -548,7 +536,7 @@ public class PlayerController2D : MonoBehaviour
         _attackTimer = attackCooldown;
 
         // Hangi saldırı tipiyse, Animator'da ilgili trigger'ı tetikle
-        if (_anim = null)
+        if (_anim)
         {
             // Aynı karede tetiklenme karışmasın diye önce resetliyoruz
             _anim.ResetTrigger("Attack1");
@@ -559,19 +547,19 @@ public class PlayerController2D : MonoBehaviour
             {
                 _anim.SetTrigger("Attack1");
 
-                SoundManager.PlaySound(SoundManager.soundType.Attack1, 0.15f);
+                SoundManager.PlaySound(SoundManager.soundType.Attack1, 1f);
 
             }else if (attackType == 2)
             {
                 _anim.SetTrigger("Attack2");
 
-                SoundManager.PlaySound(SoundManager.soundType.Attack2, 0.15f);
+                SoundManager.PlaySound(SoundManager.soundType.Attack2, 1f);
             }
             else if (attackType == 3)
             {
                 _anim.SetTrigger("Attack3");
 
-                SoundManager.PlaySound(SoundManager.soundType.Attack3, 0.15f);
+                SoundManager.PlaySound(SoundManager.soundType.Attack3, 1f);
             }
         }
         
@@ -598,6 +586,8 @@ public class PlayerController2D : MonoBehaviour
 
                 if (rb != null)
                 {
+                    SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 1f);
+
                     // Karakterin facing yönünü al (örneğin, sağa bakıyorsa +1, sola -1)
                     float facing = Mathf.Sign(transform.localScale.x);
                     // x bileşeni kesinlikle karakterin tersine, y bileşeni hafif rastgele (örnek: -0.5 ile 0.5 arası)

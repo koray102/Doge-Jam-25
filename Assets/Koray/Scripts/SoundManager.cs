@@ -12,7 +12,8 @@ public class SoundManager : MonoBehaviour
         Dash,
         HitEnemy,
         Death,
-        Perry
+        Perry,
+        DeflectBulet
     }
 
     [SerializeField] private List<AudioClip> soundList;
