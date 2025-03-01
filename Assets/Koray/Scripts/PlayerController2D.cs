@@ -127,7 +127,7 @@ public class PlayerController2D : MonoBehaviour
     private bool _isGrounded;
 
     // Attack variables
-    private bool _isAttacking;
+    internal bool _isAttacking;
     private bool canAttack;
     private Coroutine attackCooldownCoroutine;
 
@@ -145,7 +145,7 @@ public class PlayerController2D : MonoBehaviour
     private float _wallBounceTimeLeft;
     private float _lastWallBounceTime;
 
-    public bool attacking;
+    internal bool isStunned;
 
 
     void Awake()
@@ -204,7 +204,7 @@ public class PlayerController2D : MonoBehaviour
 
         // Saldırı
         // Kombo saldırı denemesi
-        if (Input.GetKeyDown(KeyCode.F) && canAttack)
+        if (Input.GetKeyDown(KeyCode.F) && canAttack && !isStunned)
         {
             AttemptComboAttack();
         }

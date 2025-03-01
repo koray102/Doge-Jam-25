@@ -4440,7 +4440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: attackHitDelay
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: detectionRange
@@ -4451,8 +4451,16 @@ PrefabInstance:
       value: 3145728
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: stunPlayerDuration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: fakeAttackIntelligence
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+      propertyPath: stunAfterParryDuration
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'

@@ -132,7 +132,7 @@ public abstract class NPCBase : MonoBehaviour
         if ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player")) ||
             (hitLower.collider != null && hitLower.collider.CompareTag("Player")))
         {
-            Debug.Log("Player detected");
+            //Debug.Log("Player detected");
             return player;
         }
         else if (hitUpper.collider != null && hitUpper.collider.CompareTag("Hologram"))
@@ -182,7 +182,8 @@ public abstract class NPCBase : MonoBehaviour
 
     protected virtual void Die()
     {
-        Instantiate(deathExplosion, transform.position, quaternion.identity);
+        if(deathExplosion) Instantiate(deathExplosion, transform.position, quaternion.identity);
+
         Destroy(gameObject);
     }
 

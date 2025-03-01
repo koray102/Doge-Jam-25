@@ -18,8 +18,40 @@ public class NPC1Controller : NPCBase
     public bool isAttacking = false;
     public bool isFakeAttack = false;
     private bool canAttack = true;
+    private Coroutine attackCoroutine;
+
+    [Header("Parry Settings")]
+    [SerializeField] private float stunAfterParryDuration;
+    [SerializeField] private float stunPlayerDuration;
+    private bool didParried;
 
     // Base sınıftaki attackDuration, attackCooldown ve attackHitDelay kullanılmaktadır.
+
+
+    protected override void Update()
+    {
+        // NPCBase'deki Update metodu çalışsın
+        base.Update();
+
+        if(isAttacking && !isFakeAttack) // Normal saldiri yapiyorsa
+        {
+            Debug.Log("Attacking");
+
+            if(player.gameObject.GetComponent<PlayerController2D>()._isAttacking)
+            {
+                StartCoroutine(ParryReceived());
+            }
+        }else if (isAttacking && isFakeAttack)
+        {
+            Debug.Log("Faking");
+
+            if(player.gameObject.GetComponent<PlayerController2D>()._isAttacking)
+            {
+                StartCoroutine(StunPlayer());
+            }
+        }
+    }
+
 
     protected override void Patrol()
     {
@@ -60,7 +92,7 @@ public class NPC1Controller : NPCBase
         if (!isFakeAttack)
             spriteRenderer.color = Color.white;
 
-        if(isAttacking || isFakeAttack)
+        if(isAttacking || isFakeAttack || didParried)
             return;
 
         Transform detectedTarget = DetectTarget();
@@ -97,7 +129,7 @@ public class NPC1Controller : NPCBase
 
     protected override void Attack()
     {
-        StartCoroutine(AttackSequence());
+        attackCoroutine = StartCoroutine(AttackSequence());
     }
 
     private IEnumerator AttackSequence()
@@ -117,6 +149,7 @@ public class NPC1Controller : NPCBase
             else
                 ExecuteRealAttack();
         }
+
         // Saldırının süresi kadar bekle (attackDuration örn. 0.5 sn)
         yield return new WaitForSeconds(attackDuration);
         animator.SetTrigger("EndAttack");
@@ -131,6 +164,7 @@ public class NPC1Controller : NPCBase
     private void ExecuteRealAttack()
     {
         TriggerAttackAnimation();
+
         if (target.CompareTag("Player"))
         {
             // Belirlenen gecikme sonrası oyuncuya saldırı uygula
@@ -181,9 +215,39 @@ public class NPC1Controller : NPCBase
         }
     }
 
-    public void ParryReceived()
+    public IEnumerator ParryReceived()
     {
+        Debug.Log("Attack Parried");
+        didParried = true;
+        if(attackCoroutine != null) StopCoroutine(attackCoroutine);
+
+        CancelInvoke("ApplyDamage");
+        isAttacking = false;
+        isFakeAttack = false;
+
         animator.SetTrigger("EndAttack");
+
+        yield return new WaitForSeconds(stunAfterParryDuration);
+        canAttack = true;
+        didParried = false;
+    }
+
+    public IEnumerator StunPlayer()
+    {
+        Debug.Log("Player Faked");
+        player.gameObject.GetComponent<PlayerController2D>().isStunned = true;
+
+        if(attackCoroutine != null) StopCoroutine(attackCoroutine);
+        
+        isAttacking = false;
+        isFakeAttack = false;
+        animator.SetTrigger("EndAttack");
+
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
+        
+        yield return new WaitForSeconds(stunPlayerDuration - attackCooldown);
+        player.gameObject.GetComponent<PlayerController2D>().isStunned = false;
     }
 
     public override void GetDamage(float damage)

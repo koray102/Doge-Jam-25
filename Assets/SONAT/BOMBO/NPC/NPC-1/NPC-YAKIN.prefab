@@ -180,13 +180,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  zeka: 0.01
+  intelligence: 0.1
   startDirectionIsRight: 0
-  patrolSpeed: 2
-  chaseSpeed: 3
-  detectionRange: 10.8
-  attackRange: 1.75
+  patrolSpeed: 0.5
+  chaseSpeed: 1
+  detectionRange: 0.68
+  attackRange: 1
   attackCooldown: 1.5
+  attackDuration: 3
+  attackHitDelay: 1.5
   detectionRayOffset: 0.44
   detectionLayerMask:
     serializedVersion: 2
@@ -199,20 +201,19 @@ MonoBehaviour:
   groundCheckRadius: 0.2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1048576
+    m_Bits: 3145728
   rayPoint: {fileID: 5012395604290058325}
   attackPoint: {fileID: 9066816224453161646}
-  OlumPatlamasi: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
-  fakeAttackIntelligence: 2.7699986
-  fakeAttackDelay: 1
+  deathExplosion: {fileID: 0}
+  fakeAttackIntelligence: 1
   fakeAttackMultiplier: 0.7
   maxFakeAttackChance: 0.7
-  hologramRealizationIntelligent: 0.01
+  hologramRealizationIntelligence: 0.7
   hologramAttackRetryDelay: 0.3
   isAttacking: 0
   isFakeAttack: 0
-  attackFlagDuration: 0.5
-  vurusGecikmesi: 1
+  stunAfterParryDuration: 3
+  stunPlayerDuration: 3
 --- !u!95 &1493195291048073188
 Animator:
   serializedVersion: 7
