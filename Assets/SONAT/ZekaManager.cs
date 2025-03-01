@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ZekaManager : MonoBehaviour
 {
-    // Public prefab referanslar�; Unity Editor �zerinden atanabilir
+    // Public prefab referansları; Unity Editor üzerinden atanabilir
     public GameObject prefab1;
     public GameObject prefab2;
 
@@ -13,7 +13,7 @@ public class ZekaManager : MonoBehaviour
     private NPC2Controller npc2;
 
     private List<GameObject> npcObjects = new List<GameObject>();
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         npc1 = prefab1.GetComponent<NPC1Controller>();
@@ -22,18 +22,18 @@ public class ZekaManager : MonoBehaviour
         int npcLayer = LayerMask.NameToLayer("NPC");
         if (npcLayer == -1)
         {
-            Debug.LogError("NPC layer bulunamad�. L�tfen 'NPC' ad�nda bir layer olu�turun.");
+            Debug.LogError("NPC layer bulunamadı. Lütfen 'NPC' adında bir layer oluşturun.");
             return;
         }
 
-        // Sahnedeki root objeleri al�p, recursive olarak NPC layer'�ndaki objeleri topluyoruz
+        // Sahnedeki root objeleri alıp, recursive olarak NPC layer'indeki objeleri topluyoruz
         GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
         foreach (GameObject root in rootObjects)
         {
             CollectNPCObjects(root, npcLayer);
         }
-
     }
+
     void CollectNPCObjects(GameObject obj, int npcLayer)
     {
         if (obj.layer == npcLayer)
@@ -49,34 +49,33 @@ public class ZekaManager : MonoBehaviour
 
     void Update()
     {
-        // E�er oyun esnas�nda bir NPC yok olduysa (destroy edildiyse), listenin referans�n� temizle
+        // Eğer oyun esnasında bir NPC yok olduysa (destroy edildiyse), listenin referansını temizle
         npcObjects.RemoveAll(npc => npc == null);
     }
 
-    // Hologram zekas�n� artt�ran metot
-    public void HologramZekaArttir()
+    // Hologram intelligence'ını arttıran metot
+    public void IncreaseHologramIntelligence()
     {
-        // Hologram zekas�n�n artt�r�lmas�na y�nelik kod buraya gelecek
-        npc1.hologramRealizationIntelligent += 0.04f;
-        Guncelle();
+        // Hologram intelligence'ının arttırılmasına yönelik kod buraya gelecek
+        npc1.hologramRealizationIntelligence += 0.04f;
+        UpdateNPCStats();
     }
 
-    // Fake zekas�n� artt�ran metot
-    public void FakeZekaArttir()
+    // Fake attack intelligence'ını arttıran metot
+    public void IncreaseFakeAttackIntelligence()
     {
-        // Fake zekas�n�n artt�r�lmas�na y�nelik kod buraya gelecek
         npc1.fakeAttackIntelligence += 0.04f;
-        Guncelle();
+        UpdateNPCStats();
     }
 
-    // Projectile zekas�n� artt�ran metot
-    public void Projectilezekaarttir()
+    // Projectile intelligence'ını arttıran metot
+    public void IncreaseProjectileIntelligence()
     {
-        npc2.zeka += 0.03f;
-        Guncelle();
+        npc2.intelligence += 0.03f;
+        UpdateNPCStats();
     }
 
-    public void Guncelle()
+    public void UpdateNPCStats()
     {
         foreach (GameObject npc in npcObjects)
         {
@@ -85,19 +84,15 @@ public class ZekaManager : MonoBehaviour
                 if (npc.CompareTag("NPC-1"))
                 {
                     NPC1Controller tempNPC1 = npc.GetComponent<NPC1Controller>();
-
-                    tempNPC1.hologramRealizationIntelligent = npc1.hologramRealizationIntelligent;
+                    tempNPC1.hologramRealizationIntelligence = npc1.hologramRealizationIntelligence;
                     tempNPC1.fakeAttackIntelligence = npc1.fakeAttackIntelligence;
                 }
                 else if (npc.CompareTag("NPC-2"))
                 {
                     NPC2Controller tempNPC2 = npc.GetComponent<NPC2Controller>();
-                    tempNPC2.zeka = npc2.zeka;
+                    tempNPC2.intelligence = npc2.intelligence;
                 }
-                
             }
         }
-
-
     }
 }

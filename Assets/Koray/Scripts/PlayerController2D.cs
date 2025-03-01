@@ -13,12 +13,12 @@ public class PlayerController2D : MonoBehaviour
     public float jumpForce = 5f;
     [SerializeField] private float stepHeight = 0.3f; // Karakterin atlayabileceği maksimum adım yüksekliği
     [SerializeField] private float stepRayDistance = 0.2f; // Engeli algılamak için yatay raycast mesafesi
+
+    
+    [Header("Jump Settings")]
     public float coyoteTime = 0.2f; // Platformdan düştükten sonra zıplama için izin verilen süre
     private float coyoteTimeCounter; // Geri sayım sayacı
     private bool hasJumped = false;
-
-
-    [Header("Jump Reset Delay")]
     public float jumpResetDelay = 0.2f;    // Zıpladıktan sonra hasJumped'i sıfırlamak için bekleme süresi
     private float jumpResetTimer = 0f;
 
@@ -76,7 +76,7 @@ public class PlayerController2D : MonoBehaviour
     private float wallBounceFacingTimer = 0f;
     
 
-    [Header("Bullet Throw Settings")]
+    [Header("Bullet Deflect Settings")]
     public float bulletThrowForce = 10f;
 
 
@@ -84,7 +84,7 @@ public class PlayerController2D : MonoBehaviour
     public float comboTimeout = 1f; // Komboyu devam ettirmek için max bekleme süresi
 
     
-    [Header("Fire Projectile Settings")]
+    [Header("Throw Projectile Settings")]
     public GameObject projectilePrefab; // Fırlatılacak prefab
     public Transform firePoint; // Fırlatma noktası (örneğin karakterin elinin bulunduğu nokta)
     public float projectileSpeed = 10f; // Fırlatma hızı
@@ -94,14 +94,9 @@ public class PlayerController2D : MonoBehaviour
     public KeyCode FireProjectileeKey = KeyCode.T;
 
 
-    [Header("Slow Down Settings")]
+    [Header("Time Slowdown Settings")]
     public float slowFactor = 0.2f;
     public float slowDuration = 0.5f; // Yavaşlatmanın süresi (saniye cinsinden, zaman ölçeğinden bağımsız olarak real time)
-
-
-    [Header("Audio Settings")]
-    public AudioSource walkSound;
-    public AudioClip walkSoundClip;
 
 
     [Header("Camera Shake")]
@@ -114,12 +109,15 @@ public class PlayerController2D : MonoBehaviour
     public float killCamShake;
     public float killCamShakeDuration;
 
+    
+    [Header("Particle Effects")]
+    public GameObject dashParticle;
+    public GameObject deflectBulletParticle;
+
 
     private float comboTimer = 0f;
     private bool inCombo = false;
     private int lastAttackType = 0;
-
-
     private Rigidbody2D _rb;
     private Animator _anim;
 
@@ -127,8 +125,11 @@ public class PlayerController2D : MonoBehaviour
     private float _horizontalInput;
     private bool _isRunning;
     private bool _isGrounded;
+
+    // Attack variables
     private bool _isAttacking;
-    private float _attackTimer;
+    private bool canAttack;
+    private Coroutine attackCooldownCoroutine;
 
     // Duvarla ilgili durumlar
     private bool _isTouchingWall;
@@ -146,49 +147,37 @@ public class PlayerController2D : MonoBehaviour
 
     public bool attacking;
 
-    [Header("Sonatın Eklemeler")]
-    public GameObject DashParticle;
-    public GameObject ElektricParticle;
-    private ZekaManager zekaManager;
-    private GameManagerScript gameManager;
-    private bool yarraYedin;
-    private SpriteRenderer sr;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        zekaManager = FindFirstObjectByType<ZekaManager>();
-        gameManager = FindFirstObjectByType<GameManagerScript>();
-         sr = GetComponent<SpriteRenderer>();
     }
-    
+
+
+    void Start()
+    {
+        canAttack = true;
+    }
+
 
     void Update()
     {
-
-        if (yarraYedin)
-        {
-            sr.color = Color.red;
-        }
-        else
-        {
-            sr.color = Color.white;
-        }
-
-
-        if (_isDashing && !DashParticle.activeInHierarchy)
-        {
-            DashParticle.SetActive(true);
-        }
-        else if (_isDashing == false && DashParticle.activeInHierarchy)
-        {
-            DashParticle.SetActive(false);
-        }
-
-
         if (didDie)
             return;
+
+        if(dashParticle)
+        {
+            if (_isDashing && !dashParticle.activeInHierarchy)
+            {
+                dashParticle.SetActive(true);
+            }
+            else if (_isDashing == false && dashParticle.activeInHierarchy)
+            {
+                dashParticle.SetActive(false);
+            }
+        }
+
 
         // Yatay girdi (A/D veya Sol/Sağ ok tuşları)
         _horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -215,7 +204,7 @@ public class PlayerController2D : MonoBehaviour
 
         // Saldırı
         // Kombo saldırı denemesi
-        if (Input.GetKeyDown(KeyCode.F) && _attackTimer <= 0f)
+        if (Input.GetKeyDown(KeyCode.F) && canAttack)
         {
             AttemptComboAttack();
         }
@@ -246,15 +235,6 @@ public class PlayerController2D : MonoBehaviour
                 jumpResetTimer -= Time.deltaTime;
         }
 
-        // Attack cooldown’u zamanla azalt
-        if (_attackTimer > 0f)
-        {
-            attacking = true;
-            _attackTimer -= Time.deltaTime;
-        }else
-        {
-            attacking = false;
-        }
 
         // Dash giriş (E tuşu)
         if (Input.GetKeyDown(dashKey))
@@ -323,12 +303,12 @@ public class PlayerController2D : MonoBehaviour
             return;
 
         // Zeminde miyiz kontrolü
-        CheckGround(_isGrounded);
+        CheckGround();
 
         // Duvar kontrolü
         CheckWall();
 
-        if(_isDashing || !_isGrounded)
+        if(_isDashing)
         {
             HandleStep(stepRayDistance * 2);
         }
@@ -361,33 +341,15 @@ public class PlayerController2D : MonoBehaviour
         {
             Flip();
         }
-
-        /* Yürüyüş sesi için kontrol
-        if (walkSound != null && _isGrounded && Mathf.Abs(_horizontalInput) > 0.1f && !_isAttacking && !_isDashing)
-        {
-            if (!walkSound.isPlaying || walkSound.clip != walkSoundClip)
-            {
-                walkSound.loop = true;
-                walkSound.clip = walkSoundClip;
-                walkSound.Play();
-            }
-        }else if (walkSound != null)
-        {
-            if (walkSound.isPlaying && walkSound.clip == walkSoundClip)
-            {
-                walkSound.Stop();
-                walkSound.loop = false;
-            }
-        }*/
     }
 
 
-    #region Step Handle
+    #region Handle Step
 
     private void HandleStep(float _stepRayDistance)
     {
-        // Yalnızca karakter hareket ediyorsa ve zemindeyse step kontrolü yapalım:
-        if (!_isGrounded || (Mathf.Abs(_horizontalInput) < 0.1f && !_isDashing))
+        // Yalnızca karakter hareket ediyorsa veya dash atiyorsa step kontrolü yapalım:
+        if (Mathf.Abs(_horizontalInput) < 0.1f && !_isDashing)
             return;
         
         // BoxCollider2D bileşenini alalım:
@@ -419,11 +381,10 @@ public class PlayerController2D : MonoBehaviour
         Debug.DrawRay(origin, Vector2.right * direction * _stepRayDistance, Color.red);
         Debug.DrawRay(new Vector2(origin.x, origin.y + stepHeight), Vector2.right * direction * _stepRayDistance, Color.green);
     }
-
     #endregion
 
 
-    #region Duvar Tırmanma Fonksiyonları
+    #region Wall Climb & Check Wall
 
     private void CheckWall()
     {
@@ -447,11 +408,10 @@ public class PlayerController2D : MonoBehaviour
         
         _rb.linearVelocity = velocity;
     }
-
     #endregion
 
 
-    #region Wall Bounce Fonksiyonları
+    #region Wall Bounce
 
     private void StartWallBounce(int direction = 1)
     {
@@ -474,11 +434,10 @@ public class PlayerController2D : MonoBehaviour
         currentVel.x = 0f;
         _rb.linearVelocity = currentVel;
     }
-
     #endregion
 
 
-    #region  Dash Fonksiyonları
+    #region Dash
 
     private void StartDash()
     {
@@ -492,12 +451,6 @@ public class PlayerController2D : MonoBehaviour
         // Karakteri yatay eksende hızla fırlat
         _rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0f);
 
-        // Opsiyonel: Animasyon tetiklemek isterseniz
-        if (_anim)
-        {
-            _anim.SetTrigger("Dash");
-        }
-
         SoundManager.PlaySound(SoundManager.soundType.Dash);
 
         StartCoroutine(Camera.Shake(dashCamShakeDuration, dashCamShake));
@@ -507,17 +460,16 @@ public class PlayerController2D : MonoBehaviour
     private void StopDash()
     {
         _isDashing = false;
-        // Dash bitince, isterseniz horizontal velocity'yi sıfırlayabilirsiniz
-        // ya da mevcut _rb.linearVelocity.y değerini koruyarak x'i 0 yapabilirsiniz.
+        
+        // Su anlik bu kismin bir etkisi yok ileride bir degisiklik olursa diye ekledim
         Vector2 currentVel = _rb.linearVelocity;
         currentVel.x = 0f;
         _rb.linearVelocity = currentVel;
     }
-
     #endregion
 
 
-    #region  Normal Zıplama & Zemin
+    #region  Jump & Ground Check
 
     private void Jump()
     {
@@ -528,23 +480,21 @@ public class PlayerController2D : MonoBehaviour
         if (_anim)
             _anim.SetTrigger("JumpUp"); // Yukarı zıplama animasyonu
 
-        
         jumpResetTimer = jumpResetDelay;  // Zıpladıktan sonra belirli süre boyunca resetlenmemesi için timer başlatılır.
         hasJumped = true;
     }
 
 
-    private void CheckGround(bool eskiisGrounded)
+    private void CheckGround()
     {
         Collider2D hit = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-
-        _isGrounded = (hit != null);
-        if (_isGrounded && !eskiisGrounded) 
-        {
-        }
+        _isGrounded = hit != null;
     }
+    #endregion
 
+
+    #region Flip
 
     private void Flip()
     {
@@ -556,7 +506,6 @@ public class PlayerController2D : MonoBehaviour
         scale.x *= -1;
         transform.localScale = scale;
     }
-
     #endregion
 
 
@@ -590,8 +539,8 @@ public class PlayerController2D : MonoBehaviour
 
     private void StartAttack(int attackType)
     {
+        canAttack = false;
         _isAttacking = true;
-        _attackTimer = attackCooldown;
 
         // Hangi saldırı tipiyse, Animator'da ilgili trigger'ı tetikle
         if (_anim)
@@ -624,15 +573,14 @@ public class PlayerController2D : MonoBehaviour
 
         // Mevcut saldırı mantığı (hasar verme vb.)
         PerformAttack();
-
-        // Saldırı animasyon süresi bitince ResetAttack çağrılıyor
-        Invoke(nameof(ResetAttack), attackDuration);
+        StartCoroutine(ResetAttack(attackDuration, attackCooldown));
     }
 
 
     private void PerformAttack()
     {
-        Debug.Log("Saldiri");
+        Debug.Log("Attack");
+
         // Attack alanındaki tüm objeleri alıyoruz (layer filtresi uygulamıyoruz ki hem enemy hem de bullet kontrol edilebilsin)
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
         foreach (Collider2D obj in hitObjects)
@@ -640,95 +588,96 @@ public class PlayerController2D : MonoBehaviour
             // Eğer objenin layer'ı "bullet" ise:
             if (obj.gameObject.layer == LayerMask.NameToLayer("BULLET"))
             {
-                Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
-
-                if (rb != null)
+                if (obj.TryGetComponent(out Rigidbody2D bulletRb))
                 {
-                    CancelInvoke(nameof(ResetAttack));
-                    ResetAttack();
-                    _attackTimer = 0;
+                    DeflectBullet(bulletRb);
 
-                    zekaManager.Projectilezekaarttir();
-
-                    SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 1f);
-
-                    // Karakterin facing yönünü al (örneğin, sağa bakıyorsa +1, sola -1)
-                    float facing = Mathf.Sign(transform.localScale.x);
-                    // x bileşeni kesinlikle karakterin tersine, y bileşeni hafif rastgele (örnek: -0.5 ile 0.5 arası)
-                    Vector2 throwDirection = new Vector2(facing, Random.Range(-0.5f, 0.5f)).normalized;
-                    rb.AddForce(throwDirection * bulletThrowForce, ForceMode2D.Impulse);
-
-                    Instantiate(ElektricParticle, rb.position, Quaternion.identity);
-
-                    StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
+                    ActivateSlowTime();
                 }
             }
-            else
+            else if(obj.TryGetComponent(out NPCBase enemyScript))
             {
-                // Diğer objeler için, örneğin enemy varsa hasar verelim:
-                NPCBase enemyScript = obj.GetComponent<NPCBase>();
-                if (enemyScript != null)
+                // NPC 1 ise attack yapiyor mu kontrolu lazim
+                if (enemyScript.TryGetComponent(out NPC1Controller npc1Controller))
                 {
-                    // NPC 1 ise attack yapiyor mu kontrolu lazim
-                    if (enemyScript.TryGetComponent<NPC1Controller>(out NPC1Controller npc1Controller))
-                    {
-                        bool isNPCAttacking = npc1Controller.isAttacking;
-                        bool isNPCFaking = npc1Controller.isFakeAttack;
+                    bool isNPCAttacking = npc1Controller.isAttacking;
+                    bool isNPCFaking = npc1Controller.isFakeAttack;
 
-                        // attack gercek ise perryle, degilse normal vurus yap
-                        if(isNPCAttacking && !isNPCFaking)
-                        {
-                            PerryAttack();
-                            StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
-                        }else
-                        {
-                            enemyScript.TakeDamage(50f);
-                            StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
-                        }
-                    }else // NPC 2 ise zaten perryleme olmayacagi icin normal vurus yap
+                    // attack gercek ise perryle, degilse normal vurus yap
+                    if(isNPCAttacking && !isNPCFaking)
+                    {
+                        PerryMeleeAttack();
+                    }else
                     {
                         enemyScript.TakeDamage(50f);
                         StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
                     }
-
-                    SoundManager.PlaySound(SoundManager.soundType.HitEnemy);
-
-                    ActivateSlowTime();
+                }else // NPC 2 ise zaten perryleme olmayacagi icin normal vurus yap
+                {
+                    enemyScript.TakeDamage(50f);
+                    StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
                 }
+
+                SoundManager.PlaySound(SoundManager.soundType.HitEnemy, 0.6f);
+
+                ActivateSlowTime();
             }
         }
     }
 
 
-    private void ResetAttack()
+    private IEnumerator ResetAttack(float attackDuration, float attackCooldown)
     {
-        _isAttacking = false;
+        // İlk olarak attackDuration süresi kadar bekle (saldırı animasyonunun süresi)
+        yield return new WaitForSecondsRealtime(attackDuration);
+        _isAttacking = false;  // Saldırı animasyonu tamamlandıktan sonra attacking durumu sıfırlansın
 
-        _attackTimer = 0;
+        // Daha sonra attackCooldown süresi kadar bekle (oyuncunun yeniden saldırıya geçebilmesi için)
+        yield return new WaitForSecondsRealtime(attackCooldown);
+        canAttack = true;
     }
-
     #endregion
 
 
-    #region Perry Attack
+    #region Perry-Deflect Attack
 
-    private void PerryAttack()
+    private void PerryMeleeAttack()
     {
-        // Bir de bi partticle efekt koymak lazim
-        Debug.Log("Perry");
+        Debug.Log("Perry Melee");
+
+        if(attackCooldownCoroutine != null) StopCoroutine(attackCooldownCoroutine);
+        attackCooldownCoroutine = StartCoroutine(ResetAttack(0, 0));
+
+        StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
+
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
-        
-        zekaManager.FakeZekaArttir();
-
-        CancelInvoke(nameof(ResetAttack));
-        ResetAttack();
     }
 
 
+    private void DeflectBullet(Rigidbody2D bulletRb)
+    {
+        Debug.Log("Deflect Bullet");
+
+        // Karakterin aninda tekrar attack yapabilmesini sagla
+        if(attackCooldownCoroutine != null) StopCoroutine(attackCooldownCoroutine);
+        attackCooldownCoroutine = StartCoroutine(ResetAttack(0, 0));
+
+        StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
+
+        SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 0.6f);
+
+        // Karakterin facing yönünü al (örneğin, sağa bakıyorsa +1, sola -1)
+        float facing = Mathf.Sign(transform.localScale.x);
+        // x bileşeni kesinlikle karakterin tersine, y bileşeni hafif rastgele (örnek: -0.5 ile 0.5 arası)
+        Vector2 throwDirection = new Vector2(facing, Random.Range(-0.5f, 0.5f)).normalized;
+        bulletRb.AddForce(throwDirection * bulletThrowForce, ForceMode2D.Impulse);
+
+        if(deflectBulletParticle) Instantiate(deflectBulletParticle, bulletRb.position, Quaternion.identity);
+    }
     #endregion
 
 
-    #region Fire Projectile
+    #region Throw Projectile
 
     public void FireProjectile()
     {
@@ -745,11 +694,10 @@ public class PlayerController2D : MonoBehaviour
             rb.linearVelocity = new Vector2(direction * projectileSpeed, 0f);
         }
     }
-
     #endregion
 
 
-    #region  Animasyon
+    #region Animations
 
     private void UpdateAnimator()
     {
@@ -762,17 +710,18 @@ public class PlayerController2D : MonoBehaviour
         _anim.SetBool("IsDashing", _isDashing);
         _anim.SetBool("IsFalling", !_isGrounded && _rb.linearVelocity.y < 0);
     }
-
     #endregion
 
 
-    #region  Ölüm
+    #region Death
 
     public void Die()
     {
         if(didDie)
             return;
 
+        Debug.Log("Died");
+        
         didDie = true;
         _rb.linearVelocity = Vector2.zero;
 
@@ -783,11 +732,10 @@ public class PlayerController2D : MonoBehaviour
             _anim.SetTrigger("Die");
         }
     }
-
     #endregion
 
 
-    #region Slow Down
+    #region Time Slowdown
 
     public void ActivateSlowTime()
     {
@@ -808,7 +756,6 @@ public class PlayerController2D : MonoBehaviour
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
     }
-
     #endregion
 
 
@@ -836,6 +783,5 @@ public class PlayerController2D : MonoBehaviour
             Gizmos.DrawLine(startPos, endPos);
         }
     }
-
     #endregion
 }

@@ -4,11 +4,9 @@ using UnityEngine.UI;
 
 public abstract class NPCBase : MonoBehaviour
 {   
-
-
     [Header("NPC Stats")]
     public float health = 100f;
-    public float zeka = 0f; // Inspector üzerinden ayarlanabilir
+    public float intelligence = 0f; // Inspector üzerinden ayarlanabilir
     private float xThickness;
     public bool startDirectionIsRight = true;
 
@@ -19,8 +17,12 @@ public abstract class NPCBase : MonoBehaviour
     [Header("Algılama ve Saldırı")]
     public float detectionRange = 5f;
     public float attackRange = 1f;
-    public float attackCooldown = 1f;
-    protected float attackTimer = 0f;
+    public float attackCooldown = 1f; // İki saldırı arasındaki bekleme süresi
+
+    [Header("Attack Timing")]
+    public float attackDuration = 0.5f; // Saldırının süresi
+    public float attackHitDelay = 0.2f; // Vuruşun gerçekleşme gecikmesi
+
     public float detectionRayOffset = 0.5f;
     public LayerMask detectionLayerMask;
 
@@ -45,48 +47,34 @@ public abstract class NPCBase : MonoBehaviour
     protected Rigidbody2D rb;
     protected SpriteRenderer spriteRenderer;
 
-    
     protected enum NPCState { Patrol, Chase }
     protected NPCState state = NPCState.Patrol;
 
     protected Vector2 facingDirection = Vector2.right;
     protected Vector2 lastFacingDirection = Vector2.right;
-
     
-    // Oyun başlamadan bakacağı yönü belirleyebilmek için:
-
-
-
     protected Animator animator;
 
     public Transform attackPoint;
 
-    public ParticleSystem OlumPatlamasi;
+    public ParticleSystem deathExplosion;
 
-    private GameManagerScript gameManagerScript;
+    protected GameManagerScript gameManagerScript;
+    protected Transform player;
 
-    private Transform player;
     protected virtual void Start()
     {
-        
-
-        xThickness = gameObject.transform.localScale.x;
+        xThickness = transform.localScale.x;
         // Başlangıç yönü ayarı
-        if (startDirectionIsRight)
-            facingDirection = Vector2.right;
-        else
-            facingDirection = Vector2.left;
-
+        facingDirection = startDirectionIsRight ? Vector2.right : Vector2.left;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
 
-        // Oyuncu bulunuyor.
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
             player = playerObj.transform;
 
-        // GameManager, tagi "GameManager" olan objeden alınıyor.
         if (gameManagerScript == null)
         {
             GameObject gmObj = GameObject.FindGameObjectWithTag("GameManager");
@@ -94,7 +82,7 @@ public abstract class NPCBase : MonoBehaviour
                 gameManagerScript = gmObj.GetComponent<GameManagerScript>();
         }
 
-        OzelBaslangic();
+        CustomStart();
     }
 
     protected virtual void Update()
@@ -105,7 +93,6 @@ public abstract class NPCBase : MonoBehaviour
         if (groundCheck != null)
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        
         switch (state)
         {
             case NPCState.Patrol:
@@ -115,7 +102,7 @@ public abstract class NPCBase : MonoBehaviour
                     animator.SetBool("IsChasing", false);
                 }
                 Patrol();
-                target = IsSomethingDetected();
+                target = DetectTarget();
                 if (target != null)
                 {
                     state = NPCState.Chase;
@@ -135,7 +122,7 @@ public abstract class NPCBase : MonoBehaviour
         UpdateSpriteFlip();
     }
 
-    protected Transform IsSomethingDetected()
+    protected Transform DetectTarget()
     {
         Vector2 originUpper = (Vector2)rayPoint.position + Vector2.up * detectionRayOffset;
         Vector2 originLower = (Vector2)rayPoint.position - Vector2.up * detectionRayOffset;
@@ -143,41 +130,25 @@ public abstract class NPCBase : MonoBehaviour
         RaycastHit2D hitLower = Physics2D.Raycast(originLower, facingDirection, detectionRange, detectionLayerMask);
 
         if ((hitUpper.collider != null && hitUpper.collider.CompareTag("Player")) ||
-                (hitLower.collider != null && hitLower.collider.CompareTag("Player")))
+            (hitLower.collider != null && hitLower.collider.CompareTag("Player")))
         {
-            return player.transform;
+            Debug.Log("Player detected");
+            return player;
         }
         else if (hitUpper.collider != null && hitUpper.collider.CompareTag("Hologram"))
         {
             HologramScript hs = hitUpper.transform.GetComponent<HologramScript>();
             if (!hs.isDetected)
-            {
                 return hitUpper.transform;
-            }
-                
         }
         else if(hitLower.collider != null && hitLower.collider.CompareTag("Hologram"))
         {
             HologramScript hs = hitLower.transform.GetComponent<HologramScript>();
             if (!hs.isDetected)
-            {
                 return hitLower.transform;
-            }
         }
-        else
-        {
-            return null;
-        }
-
-
         return null;
-            
     }
-
-    // Yeni eklenen hologram algılama metodu:
-    
-
-
 
     protected void UpdateSpriteFlip()
     {
@@ -189,7 +160,6 @@ public abstract class NPCBase : MonoBehaviour
                 transform.localScale = new Vector3(Mathf.Abs(xThickness), transform.localScale.y, transform.localScale.z);
         }
     }
-
 
     protected void TriggerAttackAnimation()
     {
@@ -203,7 +173,6 @@ public abstract class NPCBase : MonoBehaviour
             animator.SetTrigger("Fake Attack");
     }
 
-    // Hasar yeme fonksiyonu
     public virtual void TakeDamage(float damage)
     {
         health -= damage;
@@ -213,19 +182,16 @@ public abstract class NPCBase : MonoBehaviour
 
     protected virtual void Die()
     {
-        if (gameManagerScript != null)
-            gameManagerScript.OlumOldu();
-
-        Instantiate(OlumPatlamasi, gameObject.transform.position, quaternion.identity);
+        Instantiate(deathExplosion, transform.position, quaternion.identity);
         Destroy(gameObject);
     }
 
     // Türetilen sınıfların uygulaması gereken metotlar:
     protected abstract void Patrol();
-    protected abstract void OzelBaslangic();
+    protected abstract void CustomStart();
     protected abstract void ChaseAndAttack();
     protected abstract void Attack();
-    public abstract void GetDamage(float damage); // Parametre alan şekilde güncellendi
+    public abstract void GetDamage(float damage);
 
     void OnDrawGizmosSelected()
     {

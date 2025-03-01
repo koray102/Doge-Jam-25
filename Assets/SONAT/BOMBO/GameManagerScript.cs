@@ -98,50 +98,9 @@ public class GameManagerScript : MonoBehaviour
         Debug.Log("Hedefe ula��ld�!");
     }
 
-    public void OlumOldu()
-    {
-        if (SeviyeBittiMi())
-        {
-            SeviyeBittiEffectleriniAc();
-        }
-    }
 
 
-    public bool SeviyeBittiMi()
-    {
-        string npcLayerName = "NPC";
-        // NPC layer'ının indeksini alın
-        int npcLayer = LayerMask.NameToLayer(npcLayerName);
-        // Hierarchy'deki tüm GameObject'leri alın
-        GameObject[] allObjects = FindObjectsOfType<GameObject>();
-
-        // Parent objeleri tutmak için bir liste oluşturun
-        List<GameObject> parentObjects = new List<GameObject>();
-
-        foreach (GameObject obj in allObjects)
-        {
-            // Objeyi ve layer'ını kontrol edin
-            if (obj.layer == npcLayer && obj.transform.parent == null)
-            {
-                // Eğer obje NPC layer'ında ve parent'ı yoksa, listeye ekleyin
-                parentObjects.Add(obj);
-            }
-        }
-        Debug.Log(parentObjects.Count);
-
-        if (parentObjects.Count == 1 || parentObjects.Count < 1)
-        {
-
-            SeviyeBittiEffectleriniAc();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-
-    }
+   
     public void SeviyeBittiEffectleriniAc()
     {
         SeviyeGoreviBitti = true;
