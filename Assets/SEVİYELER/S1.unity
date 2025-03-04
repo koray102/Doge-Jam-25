@@ -4415,54 +4415,6 @@ PrefabInstance:
       value: NPC-YAKIN (7)
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: chaseSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: patrolSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: intelligence
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackCooldown
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackHitDelay
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: detectionRange
-      value: 0.68
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: groundLayer.m_Bits
-      value: 3145728
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: stunPlayerDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: fakeAttackIntelligence
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: stunAfterParryDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 553563565}
