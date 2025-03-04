@@ -204,11 +204,11 @@ MonoBehaviour:
     m_Bits: 3145728
   rayPoint: {fileID: 5012395604290058325}
   attackPoint: {fileID: 9066816224453161646}
-  deathExplosion: {fileID: 0}
-  fakeAttackIntelligence: 1
+  deathExplosion: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
+  fakeAttackIntelligence: 0
   fakeAttackMultiplier: 0.7
   maxFakeAttackChance: 0.7
-  hologramRealizationIntelligence: 0.7
+  hologramRealizationIntelligence: 0
   hologramAttackRetryDelay: 0.3
   isAttacking: 0
   isFakeAttack: 0

@@ -3371,6 +3371,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
+--- !u!1 &1177354289 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6609970989472451777, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
+  m_PrefabInstance: {fileID: 360155681}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1227556170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4113,6 +4118,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: Manager
+      value: 
+      objectReference: {fileID: 1177354289}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: stepHeight
       value: 0.3
       objectReference: {fileID: 0}
@@ -4416,7 +4425,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: chaseSpeed
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: attackRange

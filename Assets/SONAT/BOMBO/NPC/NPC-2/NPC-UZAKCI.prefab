@@ -242,13 +242,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 40
-  zeka: 0.01
+  intelligence: 0
   startDirectionIsRight: 1
   patrolSpeed: 2
   chaseSpeed: 3
   detectionRange: 40
   attackRange: 40
   attackCooldown: 3
+  attackDuration: 0.5
+  attackHitDelay: 0.2
   detectionRayOffset: 0.15
   detectionLayerMask:
     serializedVersion: 2
@@ -262,16 +264,13 @@ MonoBehaviour:
     m_Bits: 1048576
   rayPoint: {fileID: 4735573819797544821}
   attackPoint: {fileID: 0}
-  OlumPatlamasi: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
+  deathExplosion: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
   allowIdleTurning: 0
   idleTurnInterval: 2
   projectilePrefab: {fileID: 4020625525890682907, guid: 298cb28df1fc8764d9a10039573dcb01, type: 3}
   fakeProjectilePrefab: {fileID: 4020625525890682907, guid: a7380f740ef17b348baed6b9bda626de, type: 3}
   projectileSpawnPoint: {fileID: 1700636281221557612}
   projectileSpeed: 4
-  baseFiringInterval: 3
-  firingIntervalVariation: 0.5
-  minFiringInterval: 0.75
 --- !u!95 &2251337805955106193
 Animator:
   serializedVersion: 7
