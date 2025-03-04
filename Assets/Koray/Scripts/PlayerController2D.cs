@@ -147,11 +147,18 @@ public class PlayerController2D : MonoBehaviour
 
     internal bool isStunned;
 
+    [Header("Sonat")]
+    public GameObject Manager;
+    private GameManagerScript gameManager;
+    private ZekaManager zekaManager;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+
+        gameManager = Manager.GetComponent<GameManagerScript>();
+        zekaManager = Manager.GetComponent<ZekaManager>();
     }
 
 
@@ -453,7 +460,7 @@ public class PlayerController2D : MonoBehaviour
 
         SoundManager.PlaySound(SoundManager.soundType.Dash);
 
-        StartCoroutine(Camera.Shake(dashCamShakeDuration, dashCamShake));
+        StartCoroutine(CameraShake.Shake(dashCamShakeDuration, dashCamShake));
     }
 
 
@@ -591,7 +598,7 @@ public class PlayerController2D : MonoBehaviour
                 if (obj.TryGetComponent(out Rigidbody2D bulletRb))
                 {
                     DeflectBullet(bulletRb);
-
+                    zekaManager.IncreaseProjectileIntelligence();
                     ActivateSlowTime();
                 }
             }
@@ -605,17 +612,18 @@ public class PlayerController2D : MonoBehaviour
 
                     // attack gercek ise perryle, degilse normal vurus yap
                     if(isNPCAttacking && !isNPCFaking)
-                    {
+                    {   
+                        zekaManager.IncreaseFakeAttackIntelligence();
                         PerryMeleeAttack();
                     }else
                     {
                         enemyScript.TakeDamage(50f);
-                        StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
+                        StartCoroutine(CameraShake.Shake(hitCamShakeDuration, hitCamShake));
                     }
                 }else // NPC 2 ise zaten perryleme olmayacagi icin normal vurus yap
                 {
                     enemyScript.TakeDamage(50f);
-                    StartCoroutine(Camera.Shake(hitCamShakeDuration, hitCamShake));
+                    StartCoroutine(CameraShake.Shake(hitCamShakeDuration, hitCamShake));
                 }
 
                 SoundManager.PlaySound(SoundManager.soundType.HitEnemy, 0.6f);
@@ -648,7 +656,7 @@ public class PlayerController2D : MonoBehaviour
         if(attackCooldownCoroutine != null) StopCoroutine(attackCooldownCoroutine);
         attackCooldownCoroutine = StartCoroutine(ResetAttack(0, 0));
 
-        StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
+        StartCoroutine(CameraShake.Shake(perryCamShakeDuration, perryCamShake));
 
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
     }
@@ -662,7 +670,7 @@ public class PlayerController2D : MonoBehaviour
         if(attackCooldownCoroutine != null) StopCoroutine(attackCooldownCoroutine);
         attackCooldownCoroutine = StartCoroutine(ResetAttack(0, 0));
 
-        StartCoroutine(Camera.Shake(perryCamShakeDuration, perryCamShake));
+        StartCoroutine(CameraShake.Shake(perryCamShakeDuration, perryCamShake));
 
         SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 0.6f);
 
@@ -722,6 +730,8 @@ public class PlayerController2D : MonoBehaviour
 
         Debug.Log("Died");
         
+        gameManager.SeviyeTekrari();
+
         didDie = true;
         _rb.linearVelocity = Vector2.zero;
 
