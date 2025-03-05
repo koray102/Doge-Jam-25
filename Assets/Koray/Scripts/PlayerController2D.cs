@@ -621,15 +621,17 @@ public class PlayerController2D : MonoBehaviour
                     }else
                     {
                         enemyScript.TakeDamage(50f);
+
+                        SoundManager.PlaySound(SoundManager.soundType.HitEnemy, 0.6f);
                         StartCoroutine(CameraController.Shake(hitCamShakeDuration, hitCamShake));
                     }
                 }else // NPC 2 ise zaten perryleme olmayacagi icin normal vurus yap
                 {
                     enemyScript.TakeDamage(50f);
+
+                    SoundManager.PlaySound(SoundManager.soundType.HitEnemy, 0.6f);
                     StartCoroutine(CameraController.Shake(hitCamShakeDuration, hitCamShake));
                 }
-
-                SoundManager.PlaySound(SoundManager.soundType.HitEnemy, 0.6f);
 
                 ActivateSlowTime();
             }

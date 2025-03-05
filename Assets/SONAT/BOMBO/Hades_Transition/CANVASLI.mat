@@ -75,7 +75,7 @@ Material:
     - _Cull: 2
     - _DstBlend: 0
     - _Fullscreen_DepthWrite: 0
-    - _MaskAmount: -0.2823614
+    - _MaskAmount: -0.07694435
     - _QueueControl: 0
     - _QueueOffset: 50
     - _SrcBlend: 1
