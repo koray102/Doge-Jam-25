@@ -183,12 +183,12 @@ MonoBehaviour:
   intelligence: 0.1
   startDirectionIsRight: 0
   patrolSpeed: 0.5
-  chaseSpeed: 1
-  detectionRange: 0.68
+  chaseSpeed: 1.5
+  detectionRange: 2.6
   attackRange: 1
-  attackCooldown: 1.5
-  attackDuration: 3
-  attackHitDelay: 1.5
+  attackCooldown: 1
+  attackDuration: 1.5
+  attackHitDelay: 1
   detectionRayOffset: 0.44
   detectionLayerMask:
     serializedVersion: 2
@@ -205,10 +205,10 @@ MonoBehaviour:
   rayPoint: {fileID: 5012395604290058325}
   attackPoint: {fileID: 9066816224453161646}
   deathExplosion: {fileID: 3557838249573623312, guid: e41440bda1151454dabb33218d35cefe, type: 3}
-  fakeAttackIntelligence: 0
+  fakeAttackIntelligence: 0.2
   fakeAttackMultiplier: 0.7
   maxFakeAttackChance: 0.7
-  hologramRealizationIntelligence: 0
+  hologramRealizationIntelligence: 0.5
   hologramAttackRetryDelay: 0.3
   isAttacking: 0
   isFakeAttack: 0

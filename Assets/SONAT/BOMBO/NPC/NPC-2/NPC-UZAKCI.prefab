@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 40
-  intelligence: 0
+  intelligence: 0.5
   startDirectionIsRight: 1
   patrolSpeed: 2
   chaseSpeed: 3

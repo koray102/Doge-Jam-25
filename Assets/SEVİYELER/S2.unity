@@ -843,6 +843,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
+--- !u!1 &360155682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6609970989472451777, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
+  m_PrefabInstance: {fileID: 360155681}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &372528863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3603,9 +3608,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
-      propertyPath: ElektricParticle
+      propertyPath: Manager
       value: 
-      objectReference: {fileID: 8479238177994466824, guid: 82dfc73306766a745874099c6035dd06, type: 3}
+      objectReference: {fileID: 360155682}
     - target: {fileID: 7031847350801322427, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: m_Name
       value: Character

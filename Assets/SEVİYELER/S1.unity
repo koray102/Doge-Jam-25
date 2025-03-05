@@ -990,14 +990,6 @@ PrefabInstance:
       value: NPC-YAKIN (1)
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: chaseSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: patrolSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 462418930}
@@ -1297,17 +1289,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 852543198617055239, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6609970989472451777, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
       propertyPath: m_Name
       value: GAMEMANAGER
-      objectReference: {fileID: 0}
-    - target: {fileID: 8522610023218785316, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
-      propertyPath: afterSceneName
-      value: S2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1766,7 +1750,7 @@ Transform:
   m_GameObject: {fileID: 487483320}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.13, y: 0, z: -10}
+  m_LocalPosition: {x: 2.33, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4424,52 +4408,8 @@ PrefabInstance:
       value: NPC-YAKIN (7)
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: chaseSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackRange
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: patrolSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: intelligence
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackCooldown
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: attackHitDelay
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: detectionRange
-      value: 0.68
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: groundLayer.m_Bits
-      value: 3145728
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: stunPlayerDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: fakeAttackIntelligence
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
-      propertyPath: stunAfterParryDuration
-      value: 3
+      value: 2.15
       objectReference: {fileID: 0}
     - target: {fileID: 270294040031133370, guid: 5aea74ab3ded78b46a9dfce35b6a5cef, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'

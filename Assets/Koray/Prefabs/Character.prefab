@@ -369,8 +369,8 @@ MonoBehaviour:
   killCamShake: 0
   killCamShakeDuration: 0
   dashParticle: {fileID: 3964676188289405538}
-  deflectBulletParticle: {fileID: 0}
-  attacking: 0
+  deflectBulletParticle: {fileID: 8479238177994466824, guid: 82dfc73306766a745874099c6035dd06, type: 3}
+  Manager: {fileID: 0}
 --- !u!95 &738059417067656967
 Animator:
   serializedVersion: 7

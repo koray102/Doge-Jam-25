@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class CameraShake : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     // Bu metodu istediğiniz an çağırarak kamerayı sarsabilirsiniz.
     // duration: sarsıntı süresi, magnitude: sarsıntı yoğunluğu

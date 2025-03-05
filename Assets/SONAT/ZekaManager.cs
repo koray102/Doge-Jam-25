@@ -14,10 +14,13 @@ public class ZekaManager : MonoBehaviour
 
     private List<GameObject> npcObjects = new List<GameObject>();
 
+    
+    
     void Start()
     {
         npc1 = prefab1.GetComponent<NPC1Controller>();
         npc2 = prefab2.GetComponent<NPC2Controller>();
+
 
         int npcLayer = LayerMask.NameToLayer("NPC");
         if (npcLayer == -1)
@@ -51,20 +54,26 @@ public class ZekaManager : MonoBehaviour
     {
         // Eğer oyun esnasında bir NPC yok olduysa (destroy edildiyse), listenin referansını temizle
         npcObjects.RemoveAll(npc => npc == null);
+
+        if(Input.GetKeyDown(KeyCode.P) && Input.GetKey(KeyCode.K)){
+         npc1.hologramRealizationIntelligence = 0;
+         npc1.fakeAttackIntelligence = 0;
+         npc2.intelligence = 0;   
+        }
     }
 
     // Hologram intelligence'ını arttıran metot
     public void IncreaseHologramIntelligence()
     {
         // Hologram intelligence'ının arttırılmasına yönelik kod buraya gelecek
-        npc1.hologramRealizationIntelligence += 0.04f;
+        npc1.hologramRealizationIntelligence += 0.02f;
         UpdateNPCStats();
     }
 
     // Fake attack intelligence'ını arttıran metot
     public void IncreaseFakeAttackIntelligence()
     {
-        npc1.fakeAttackIntelligence += 0.04f;
+        npc1.fakeAttackIntelligence += 0.02f;
         UpdateNPCStats();
     }
 

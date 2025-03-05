@@ -123,6 +123,7 @@ public class PlayerController2D : MonoBehaviour
 
     // Hareket ve durum değişkenleri
     private float _horizontalInput;
+    private float _verticalInput;
     private bool _isRunning;
     private bool _isGrounded;
 
@@ -188,6 +189,7 @@ public class PlayerController2D : MonoBehaviour
 
         // Yatay girdi (A/D veya Sol/Sağ ok tuşları)
         _horizontalInput = Input.GetAxisRaw("Horizontal");
+        _verticalInput = Input.GetAxisRaw("Vertical");
         // Koşma tuşu
         _isRunning = Input.GetKey(KeyCode.LeftShift);
 
@@ -327,7 +329,8 @@ public class PlayerController2D : MonoBehaviour
         // Duvardaysak duvar slide hareketi
         if (_isWallSliding && !_isGrounded)
         {
-            WallSlideMovement();
+            float wallSlideSpeedA = _verticalInput < 0 ? wallSlideSpeed * 5 : wallSlideSpeed;
+            WallSlideMovement(wallSlideSpeedA);
         }else
         {
             // Normal yatay hareket
@@ -404,7 +407,7 @@ public class PlayerController2D : MonoBehaviour
     }
 
 
-    private void WallSlideMovement()
+    private void WallSlideMovement(float wallSlideSpeed)
     {
         Vector2 velocity = _rb.linearVelocity;
 
@@ -460,7 +463,7 @@ public class PlayerController2D : MonoBehaviour
 
         SoundManager.PlaySound(SoundManager.soundType.Dash);
 
-        StartCoroutine(CameraShake.Shake(dashCamShakeDuration, dashCamShake));
+        StartCoroutine(CameraController.Shake(dashCamShakeDuration, dashCamShake));
     }
 
 
@@ -618,12 +621,12 @@ public class PlayerController2D : MonoBehaviour
                     }else
                     {
                         enemyScript.TakeDamage(50f);
-                        StartCoroutine(CameraShake.Shake(hitCamShakeDuration, hitCamShake));
+                        StartCoroutine(CameraController.Shake(hitCamShakeDuration, hitCamShake));
                     }
                 }else // NPC 2 ise zaten perryleme olmayacagi icin normal vurus yap
                 {
                     enemyScript.TakeDamage(50f);
-                    StartCoroutine(CameraShake.Shake(hitCamShakeDuration, hitCamShake));
+                    StartCoroutine(CameraController.Shake(hitCamShakeDuration, hitCamShake));
                 }
 
                 SoundManager.PlaySound(SoundManager.soundType.HitEnemy, 0.6f);
@@ -656,7 +659,7 @@ public class PlayerController2D : MonoBehaviour
         if(attackCooldownCoroutine != null) StopCoroutine(attackCooldownCoroutine);
         attackCooldownCoroutine = StartCoroutine(ResetAttack(0, 0));
 
-        StartCoroutine(CameraShake.Shake(perryCamShakeDuration, perryCamShake));
+        StartCoroutine(CameraController.Shake(perryCamShakeDuration, perryCamShake));
 
         SoundManager.PlaySound(SoundManager.soundType.Perry, 1f);
     }
@@ -670,7 +673,7 @@ public class PlayerController2D : MonoBehaviour
         if(attackCooldownCoroutine != null) StopCoroutine(attackCooldownCoroutine);
         attackCooldownCoroutine = StartCoroutine(ResetAttack(0, 0));
 
-        StartCoroutine(CameraShake.Shake(perryCamShakeDuration, perryCamShake));
+        StartCoroutine(CameraController.Shake(perryCamShakeDuration, perryCamShake));
 
         SoundManager.PlaySound(SoundManager.soundType.DeflectBulet, 0.6f);
 

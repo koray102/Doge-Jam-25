@@ -206,15 +206,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GAMEMANAGER
       objectReference: {fileID: 0}
-    - target: {fileID: 8522610023218785316, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
-      propertyPath: afterSceneName
-      value: S4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
+--- !u!1 &360155682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6609970989472451777, guid: bae259017c5706e4e9209aee6b8d61aa, type: 3}
+  m_PrefabInstance: {fileID: 360155681}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &487483320
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,6 +685,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
+      propertyPath: Manager
+      value: 
+      objectReference: {fileID: 360155682}
     - target: {fileID: 5326541666768602981, guid: a104956727813cf45ae06b070afcb37e, type: 3}
       propertyPath: ElektricParticle
       value: 
